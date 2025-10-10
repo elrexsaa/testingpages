@@ -44,3 +44,29 @@ window.addEventListener('load', () => {
     }, 600);
   }, 2500);
 });
+// animasi intro text
+const texts = [
+  "our memories website",
+  "this is our story",
+  "hope u like it"
+];
+
+let index = 0;
+const introEl = document.getElementById('intro-text');
+
+function showNextText() {
+  introEl.classList.remove('fade-in');
+  void introEl.offsetWidth;
+  introEl.classList.add('fade-in');
+  introEl.textContent = texts[index];
+
+  setTimeout(() => {
+    introEl.classList.remove('fade-in');
+    index++;
+    if (index < texts.length) {
+      setTimeout(showNextText, 1000);
+    }
+  }, 3000);
+}
+
+showNextText();
