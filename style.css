@@ -26,7 +26,7 @@ body{
 
 .mem-header{
   position:sticky;top:0;
-  padding:12px 0; /* Padding header sedikit dikurangi */
+  padding:12px 0; 
   margin-bottom:24px;
   background:var(--header-bg);backdrop-filter:blur(5px);z-index:50;
 }
@@ -55,7 +55,7 @@ body{
 /* --- PERBAIKAN HEADER ESTETIK MOBILE --- */
 .mem-header h2{
   font-family:var(--font-script);
-  font-size:2.2rem; /* Ukuran default untuk mobile */
+  font-size:2.2rem; 
   color:var(--accent);
   line-height:1.2;
   margin-bottom:4px;
@@ -128,6 +128,65 @@ body{
 }
 .content-section p{font-size:1rem;line-height:1.6;color:#4a4a4a;margin-bottom:16px}
 
+/* --- GAYA SPOTIFY MUSIC CARD BARU --- */
+.music-card {
+    display: flex; /* Mengatur tata letak cover dan info */
+    align-items: center;
+    background: var(--glass-card);
+    padding: 15px;
+    border-radius: 18px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.track-cover {
+    width: 60px; /* Ukuran sampul album */
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.track-info {
+    flex-grow: 1; /* Mengisi sisa ruang */
+    display: flex;
+    flex-direction: column;
+}
+
+.tmeta {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.tsub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+/* Styling Audio Control agar lebih rapi */
+.music-card audio {
+    width: 100%;
+    height: 30px; /* Membuat kontrol audio lebih ringkas */
+    filter: sepia(100%) saturate(200%) hue-rotate(290deg) brightness(80%) contrast(100%); 
+    /* Filter untuk memberi sedikit warna pink/ungu pada kontrol audio */
+}
+
+/* Style untuk Quotes agar tidak bentrok dengan .track yang lama */
+.content-section #sectionQuotes .track {
+    background: var(--glass-card);
+    padding: 15px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Hapus .track audio lama */
+.track audio { display: none; }
+/* --- AKHIR GAYA SPOTIFY MUSIC CARD BARU --- */
+
+
 /* --- GAYA CAROUSEL FOTO BARU & ESTETIK --- */
 .carousel-container {
     overflow: hidden; 
@@ -175,15 +234,6 @@ body{
 }
 /* --- AKHIR GAYA CAROUSEL FOTO BARU & ESTETIK --- */
 
-
-.track{
-  background:var(--glass-card);
-  padding:15px;
-  border-radius:18px;
-  margin-bottom:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.05);
-}
-.track audio{width:100%;margin-top:10px}
 
 .chat-frame{
   background:#f4f4f4;
