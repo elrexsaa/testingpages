@@ -181,7 +181,7 @@ body{
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  animation: introFade 1.5s ease forwards;
+  transition: opacity 0.5s ease;
 }
 
 .intro-text {
@@ -190,30 +190,17 @@ body{
   color: var(--accent);
   text-align: center;
   letter-spacing: 1px;
-  opacity: 0;
+  opacity: 0; 
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
+  transition: opacity 0.8s ease-in-out; 
 }
 
-@keyframes introText {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  30% {
+.intro-text.is-visible {
     opacity: 1;
-    transform: translateY(0);
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
 }
 
 @keyframes introFade {
