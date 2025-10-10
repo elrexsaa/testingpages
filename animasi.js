@@ -37,7 +37,7 @@ window.addEventListener('load', () => {
       showNext();
 
     }, 600);
-  }, 3500); // durasi intro nya disini
+  }, 11000); // durasi intro nya disini
 });
 
 // animasi intro text
