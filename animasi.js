@@ -15,7 +15,7 @@ const sections = document.querySelectorAll('main > *');
 
 window.addEventListener('load', () => {
   // disable scroll pas intro
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = 'auto';
 
   // fade out intro
   setTimeout(() => {
