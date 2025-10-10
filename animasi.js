@@ -41,3 +41,17 @@ window.onload = () => {
     showNext();
   }, 3000);
 };
+// animasi.js
+
+window.addEventListener('load', () => {
+  const intro = document.getElementById('intro');
+  const mainPage = document.querySelector('main');
+
+  setTimeout(() => {
+    intro.classList.add('fade-out');
+    setTimeout(() => {
+      intro.style.display = 'none';
+      mainPage.classList.remove('hidden');
+    }, 500);
+  }, 2500);
+});
