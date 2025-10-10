@@ -13,7 +13,8 @@ const contentSections = document.querySelectorAll('.content-section');
 
 // Elemen Audio
 const bgm = document.getElementById('bgm');
-const allTracks = document.querySelectorAll('.track audio'); // Semua lagu di dalam section
+// FIX: MENGGANTI SELECTOR AGAR SESUAI DENGAN CLASS BARU (music-card)
+const allTracks = document.querySelectorAll('.music-card audio'); // <- SUDAH DIPERBAIKI
 
 const introTexts = [
   "our memories website",
@@ -31,10 +32,12 @@ const SECTION_DELAY = 800;
 
 // --- FUNGSIONALITAS AUDIO: SINGLE PLAY ---
 function stopAllAudio(currentPlaying) {
+    // 1. Stop BGM jika lagu di daftar diputar
     if (currentPlaying !== bgm && !bgm.paused) {
         bgm.pause();
     }
 
+    // 2. Stop semua lagu di daftar jika ada yang lain diputar
     allTracks.forEach(track => {
         if (track !== currentPlaying && !track.paused) {
             track.pause();
@@ -42,6 +45,7 @@ function stopAllAudio(currentPlaying) {
         }
     });
 
+    // 3. Jika yang diputar adalah BGM, stop semua lagu di daftar
     if (currentPlaying === bgm) {
         allTracks.forEach(track => {
             if (!track.paused) {
@@ -53,8 +57,10 @@ function stopAllAudio(currentPlaying) {
 }
 
 function setupAudioListeners() {
+    // Event listener untuk BGM
     bgm.addEventListener('play', () => stopAllAudio(bgm));
     
+    // Event listener untuk setiap lagu di daftar (SUDAH BENAR)
     allTracks.forEach(track => {
         track.addEventListener('play', () => stopAllAudio(track));
     });
@@ -78,16 +84,12 @@ function initCarousel(carouselTrack) {
     let autoSlideTimer;
     let currentIndex = 0;
     
-    // Hitung lebar slide (80% lebar track + gap 16px)
-    const slideWidth = slides[0].offsetWidth + 16; 
+    const slideWidth = slides[0].offsetWidth + 20; // 20 adalah gap
     const TRACK_CENTER_OFFSET = slideWidth;
 
-    // Fungsi untuk mengupdate slide aktif
     function updateActiveSlide() {
         const scrollLeft = carouselTrack.scrollLeft;
         
-        // Perhitungan indeks slide yang paling dekat ke tengah container
-        // Dibulatkan untuk mendapatkan slide yang paling dominan di tengah
         const centerIndex = Math.round(scrollLeft / slideWidth); 
 
         slides.forEach(slide => slide.classList.remove('active'));
@@ -98,32 +100,26 @@ function initCarousel(carouselTrack) {
         }
     }
 
-    // Fungsi untuk slide berikutnya (digunakan oleh auto-slide)
     function nextSlide() {
         currentIndex = (currentIndex + 1) % slides.length;
         carouselTrack.scroll({
             left: currentIndex * slideWidth,
             behavior: 'smooth'
         });
-        // Tunggu scroll selesai sebelum update active state
         setTimeout(updateActiveSlide, 450); 
     }
     
-    // Fungsi untuk memulai auto-slide (5 detik)
     function startAutoSlide() {
         clearInterval(autoSlideTimer); 
         autoSlideTimer = setInterval(nextSlide, 5000); 
     }
     
-    // Event listener untuk interaksi pengguna (menggeser)
     carouselTrack.addEventListener('scroll', () => {
         updateActiveSlide(); 
-        // Reset timer saat user berinteraksi
         clearInterval(autoSlideTimer);
         autoSlideTimer = setInterval(nextSlide, 5000);
     });
 
-    // Inisiasi awal
     carouselTrack.scrollLeft = 0;
     setTimeout(() => {
         updateActiveSlide();
@@ -198,11 +194,9 @@ function startMemoryReveal() {
             setTimeout(() => {
                 section.classList.add('show');
                 
-                // PANGGIL CAROUSEL FOTO setelah section-nya muncul
                 if (section.id === 'sectionPhotos') {
                     const carouselTrack = section.querySelector('.carousel-track');
                     if (carouselTrack) {
-                        // Tunggu transisi reveal selesai (1.3s)
                         setTimeout(() => initCarousel(carouselTrack), 1300); 
                     }
                 }
