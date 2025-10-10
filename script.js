@@ -62,6 +62,5 @@ function populateChat(){
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-window.onload = function(){
-  populateChat();
-};
+window.addEventListener('load', populateChat);
+});
