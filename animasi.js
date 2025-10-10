@@ -10,18 +10,22 @@ const bgm = document.getElementById('bgm');
 const allTracks = document.querySelectorAll('.music-card audio'); 
 
 // Elemen Animasi Intro
-const introTitle = document.getElementById('intro-title'); // Our Memories Website
-const introSubtitle1 = document.getElementById('intro-subtitle-1'); // this is our story
-const introSubtitle2 = document.getElementById('intro-subtitle-2'); // hope u like it
+const introTitle = document.getElementById('intro-title'); 
+const introSubtitle1 = document.getElementById('intro-subtitle-1'); 
+const introSubtitle2 = document.getElementById('intro-subtitle-2'); 
 const introTypingElement = document.getElementById('intro-text-typing');
 const permanentGreeting = document.getElementById('greeting');
 const GREETING_TEXT = permanentGreeting.textContent;
 
 const TYPING_SPEED = 50; 
-const DELAY_BETWEEN_SUBTITLES = 500; // 0.5 detik antar subtitle
-const DELAY_BEFORE_TYPING = 1000; // 1 detik setelah subtitle terakhir
+const DELAY_TRANSITION = 700; // Waktu untuk fade in/out (0.5s di CSS + buffer)
 const FINAL_DELAY = 3500; // 3.5 detik (antara 3 sampai 4)
 
+
+// --- FUNGSI UTILITY: DELAY ---
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // --- 1. SETUP HEARTS ---
 for (let i = 0; i < 30; i++) {
@@ -125,58 +129,66 @@ function initCarousel(carouselTrack) {
 }
 
 
-// --- 1. LOGIKA ANIMASI INTRO (Alur yang diminta) ---
-function startIntroSequence() {
+// --- 1. LOGIKA ANIMASI INTRO (Alur yang diminta - FADE IN/OUT BERGANTIAN) ---
+async function startIntroSequence() {
     // 1. Our Memories Website muncul
     introTitle.classList.add('is-visible'); 
+    await delay(DELAY_TRANSITION * 2); // Tahan 1.4 detik
+    introTitle.classList.remove('is-visible');
+    await delay(DELAY_TRANSITION); // Jeda 0.7 detik
+
+    // 2. this is our story muncul dan hilang
+    introSubtitle1.classList.add('is-visible');
+    await delay(DELAY_TRANSITION * 2); // Tahan 1.4 detik
+    introSubtitle1.classList.remove('is-visible');
+    await delay(DELAY_TRANSITION); // Jeda 0.7 detik
+
+    // 3. hope u like it muncul dan hilang
+    introSubtitle2.classList.add('is-visible');
+    await delay(DELAY_TRANSITION * 2); // Tahan 1.4 detik
+    introSubtitle2.classList.remove('is-visible');
+    await delay(DELAY_TRANSITION); // Jeda 0.7 detik
     
-    // 2. this is our story muncul
-    setTimeout(() => {
-        introSubtitle1.classList.add('is-visible');
-    }, 500); // 0.5 detik
-
-    // 3. hope u like it muncul
-    setTimeout(() => {
-        introSubtitle2.classList.add('is-visible');
-
-        // 4. Jeda sebelum ketik dimulai
-        setTimeout(() => {
-            startTypingEffect();
-        }, DELAY_BEFORE_TYPING); // 1 detik jeda
-
-    }, 1000); // 1 detik (0.5 detik setelah subtitle 1)
+    // 4. Jeda sebelum ketik dimulai (Jeda 1 detik seperti permintaan sebelumnya)
+    await delay(1000); 
+    
+    // 5. Mulai Typing
+    await startTypingEffect();
 }
 
 function startTypingEffect() {
-    // 5. Mulai Ketik: "hi, my beloved..."
-    introTypingElement.textContent = GREETING_TEXT; 
-    introTypingElement.classList.add('is-visible');
-    introTypingElement.classList.add('intro-text-typing-effect');
-
-    // Hitung durasi typing
-    const typingDuration = GREETING_TEXT.length * TYPING_SPEED + 1000;
-
-    setTimeout(() => {
-        // 6. Ketikan selesai, hapus kursor
-        introTypingElement.classList.remove('intro-text-typing-effect');
-        
-        // 7. Jeda 3.5 detik (3-4 detik yang diminta)
+    return new Promise(resolve => {
+        // Teks ketikan muncul di tengah
+        introTypingElement.textContent = GREETING_TEXT; 
+        introTypingElement.classList.add('is-visible');
+        introTypingElement.classList.add('intro-text-typing-effect');
+    
+        // Hitung durasi typing
+        const typingDuration = GREETING_TEXT.length * TYPING_SPEED + 500; // Ditambah 0.5s buffer
+    
         setTimeout(() => {
-            // FADE OUT INTRO SCREEN
-            introScreenOverlay.classList.add('fade-out'); 
+            // Ketikan selesai, hapus kursor
+            introTypingElement.classList.remove('intro-text-typing-effect');
             
+            // TUNDA FINAL DELAY (3.5 detik)
             setTimeout(() => {
-                introScreenOverlay.style.display = 'none'; 
-                mainPage.classList.remove('hidden'); 
-                document.body.style.overflowY = 'auto'; 
+                // FADE OUT INTRO SCREEN
+                introScreenOverlay.classList.add('fade-out'); 
                 
-                // 8. MEMULAI REVEAL SERENTAK
-                startMemoryReveal();
-            }, 500); // Waktu fade out
-            
-        }, FINAL_DELAY); 
-
-    }, typingDuration);
+                setTimeout(() => {
+                    introScreenOverlay.style.display = 'none'; 
+                    mainPage.classList.remove('hidden'); 
+                    document.body.style.overflowY = 'auto'; 
+                    
+                    // MEMULAI REVEAL SERENTAK
+                    startMemoryReveal();
+                    resolve(); // Resolusi promise setelah semua selesai
+                }, 500); // Waktu fade out
+                
+            }, FINAL_DELAY); 
+    
+        }, typingDuration);
+    });
 }
 
 
