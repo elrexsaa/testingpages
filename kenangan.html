@@ -20,34 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-
-  <style>
-    /* animasi cinematic */
-    .fade-in, .fade-up {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 1.4s ease, transform 1.4s ease;
-    }
-    .show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    body {
-      background: black;
-      color: white;
-      transition: background 1s ease;
-    }
-
-    main {
-      animation: fadeInBody 2s ease forwards;
-    }
-
-    @keyframes fadeInBody {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  </style>
+  <link rel="stylesheet" href="animasi.css">
 </head>
 <body>
   <!-- intro opening -->
@@ -55,20 +28,11 @@
     <div class="intro-text">our memory website 💖</div>
   </div>
 
-  <!-- animasi love background -->
+  <!-- love bg -->
   <div class="bg-hearts"></div>
 
+  <!-- satu main aja -->
   <main class="page--stack hidden">
-    <!-- semua isi konten lo yang tadi tetep -->
-  </main>
-
-  <script src="script.js"></script>
-  <script src="animasi.js"></script>
-
-  <!-- bg music -->
-  <audio id="bgm" src="sound/audio.mp3" autoplay loop></audio>
-
-  <main class="page--stack">
     <header class="mem-header fade-in">
       <h2 id="greeting" class="typewriter">Hi, My Beloved Nikita Friskila Pakpahan💗💗💗</h2>
       <p class="muted">pilih salah satu album kenangan kita di bawah ini ya!</p>
@@ -140,22 +104,13 @@
     </div>
   </main>
 
+  <!-- bg music -->
+  <audio id="bgm" src="sound/audio.mp3" autoplay loop></audio>
+
   <script src="script.js"></script>
-
+  <script src="animasi.js"></script>
   <script>
-    // animasi scroll muncul kaya film
-    const elements = document.querySelectorAll('.fade-in, .fade-up');
-    window.addEventListener('scroll', () => {
-      const trigger = window.innerHeight * 0.8;
-      elements.forEach(el => {
-        const top = el.getBoundingClientRect().top;
-        if (top < trigger) {
-          el.classList.add('show');
-        }
-      });
-    });
-
-    // auto play audio
+    // auto play audio pas user klik
     const bgm = document.getElementById('bgm');
     document.addEventListener('click', () => {
       bgm.play();
