@@ -25,7 +25,9 @@ body{
 .page--stack{max-width:768px;margin:0 auto;padding:20px 16px 80px}
 
 .mem-header{
-  position:sticky;top:0;padding:16px 0;margin-bottom:24px;
+  position:sticky;top:0;
+  padding:12px 0; /* Padding header sedikit dikurangi */
+  margin-bottom:24px;
   background:var(--header-bg);backdrop-filter:blur(5px);z-index:50;
 }
 
@@ -50,13 +52,27 @@ body{
   display: none;
 }
 
+/* --- PERBAIKAN HEADER ESTETIK MOBILE --- */
 .mem-header h2{
   font-family:var(--font-script);
-  font-size:2.5rem;
+  font-size:2.2rem; /* Ukuran default untuk mobile */
   color:var(--accent);
   line-height:1.2;
   margin-bottom:4px;
 }
+/* Penyesuaian untuk layar sangat kecil */
+@media (max-width: 380px) {
+  .mem-header h2 {
+    font-size: 1.8rem;
+  }
+}
+/* Penyesuaian untuk layar desktop/tablet yang lebih besar */
+@media (min-width: 640px) {
+  .mem-header h2 {
+    font-size: 2.8rem;
+  }
+}
+/* --- AKHIR PERBAIKAN HEADER --- */
 
 #btnLogout{
   position:absolute;top:20px;right:16px;
@@ -112,7 +128,7 @@ body{
 }
 .content-section p{font-size:1rem;line-height:1.6;color:#4a4a4a;margin-bottom:16px}
 
-/* --- GAYA CAROUSEL FOTO BARU & ESTETIK (FIXED) --- */
+/* --- GAYA CAROUSEL FOTO BARU & ESTETIK --- */
 .carousel-container {
     overflow: hidden; 
     margin: 20px 0;
@@ -123,9 +139,8 @@ body{
     overflow-x: scroll; 
     scroll-snap-type: x mandatory; 
     scroll-behavior: smooth;
-    gap: 20px; /* Jarak antar foto diperlebar */
-    padding: 0 12.5%; /* Memberi ruang di kiri/kanan agar foto tengah pas 75% */
-    /* Sembunyikan scrollbar */
+    gap: 20px; 
+    padding: 0 12.5%; 
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -134,10 +149,10 @@ body{
 }
 
 .carousel-slide {
-    flex: 0 0 75%; /* FOTO FOKUS DIKECILKAN KE 75% */
+    flex: 0 0 75%; 
     max-width: 75%;
-    aspect-ratio: 1 / 1; /* Rasio 1:1 */
-    scroll-snap-align: center; /* Snap foto ke tengah */
+    aspect-ratio: 1 / 1; 
+    scroll-snap-align: center; 
     transition: all 0.4s ease-in-out;
 }
 
@@ -148,17 +163,15 @@ body{
     border-radius: 16px;
     box-shadow: var(--shadow);
     
-    /* EFEK BLUR DAN FADE OUT default (saat tidak aktif) */
-    filter: blur(8px) brightness(0.6); /* Blur diperkuat */
-    transform: scale(0.9); /* Scale diperkecil */
+    filter: blur(8px) brightness(0.6);
+    transform: scale(0.9); 
     transition: all 0.4s ease-in-out;
 }
 
-/* EFEK FOKUS (Saat slide berada di tengah) */
 .carousel-slide.active img {
-    filter: blur(0) brightness(1); /* Sharp focus */
-    transform: scale(1); /* Full size */
-    box-shadow: 0 8px 30px rgba(255,105,181,0.6); /* Bayangan pink yang manis */
+    filter: blur(0) brightness(1); 
+    transform: scale(1); 
+    box-shadow: 0 8px 30px rgba(255,105,181,0.6); 
 }
 /* --- AKHIR GAYA CAROUSEL FOTO BARU & ESTETIK --- */
 
