@@ -26,57 +26,48 @@ body{
 
 /* --- FIX: INTRO SCREEN CENTERING & TYPING STYLE --- */
 .intro-screen {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: linear-gradient(135deg, var(--bg1), var(--bg2));
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: var(--font-script);
-  font-size: 2rem;
-  z-index: 9999;
+  display: flex; justify-content: center; align-items: center;
+  font-family: var(--font-script); font-size: 2rem; z-index: 9999;
   transition: opacity 0.5s ease;
 }
 
 .intro-screen.fade-out { opacity: 0; }
 .hidden { display: none; }
 
-/* FIX: Elemen pembungkus intro content agar bisa dua baris */
 .intro-content {
-    text-align: center;
-    max-width: 90%;
+    text-align: center; max-width: 90%;
 }
-/* FIX: Style untuk judul "Our Memories Website" (statis) */
+/* Style untuk Judul utama (Our Memories Website) */
 .intro-title-static {
-    font-family: var(--font-main);
-    font-weight: 700;
-    font-size: 1.5rem; /* Ukuran subtitle */
-    color: var(--text-color);
-    margin-bottom: 15px;
-    opacity: 0; /* Mulai tersembunyi */
-    transition: opacity 0.5s ease;
+    font-family: var(--font-main); font-weight: 700; font-size: 1.6rem;
+    color: var(--text-color); margin-bottom: 10px;
+    opacity: 0; transition: opacity 0.5s ease;
 }
-.intro-title-static.is-visible {
+/* Style untuk Subtitle statis (this is our story, hope u like it) */
+.intro-subtitle {
+    font-family: var(--font-main); font-weight: 400; font-size: 1.1rem;
+    color: var(--text-color); margin-top: 5px;
+    opacity: 0; transition: opacity 0.5s ease;
+}
+.intro-title-static.is-visible, .intro-subtitle.is-visible {
     opacity: 1;
 }
 
+/* Style untuk Teks Ketikan */
 .intro-text {
-  font-size: 2.8rem;
-  font-family: var(--font-script);
-  color: var(--accent);
-  text-align: center;
-  letter-spacing: 1px;
-  opacity: 0; 
+  font-size: 2.8rem; font-family: var(--font-script); color: var(--accent);
+  text-align: center; letter-spacing: 1px; opacity: 0; 
   transition: opacity 0.8s ease-in-out; 
+  margin-top: 25px; /* Jarak setelah subtitle */
 }
 
 .intro-text.is-visible { opacity: 1; }
 
 .intro-text-typing-effect {
-  overflow:hidden;
-  border-right:2px solid var(--accent);
-  white-space:nowrap;
-  animation:typing 4s steps(40,end), blink .8s infinite;
+  overflow:hidden; border-right:2px solid var(--accent);
+  white-space:nowrap; animation:typing 4s steps(40,end), blink .8s infinite;
 }
 @keyframes typing{from{width:0}to{width:100%}}
 @keyframes blink{50%{border-color:transparent}}
@@ -104,14 +95,12 @@ body{
   background:var(--header-bg);backdrop-filter:blur(5px);z-index:50;
 }
 
-/* --- PERBAIKAN HEADER ESTETIK MOBILE (Style Lama) --- */
 .mem-header h2{
   font-family:var(--font-script); font-size:2.2rem; color:var(--accent);
   line-height:1.2; margin-bottom:4px;
 }
 @media (max-width: 380px) { .mem-header h2 { font-size: 1.8rem; } }
 @media (min-width: 640px) { .mem-header h2 { font-size: 2.8rem; } }
-/* --- AKHIR PERBAIKAN HEADER --- */
 
 #btnLogout{
   position:absolute;top:20px;right:16px;
@@ -141,9 +130,13 @@ body{
 .card-title{font-size:1.25rem;font-weight:800;margin-bottom:4px}
 .card-sub{font-size:.85rem;color:var(--muted)}
 
+/* FIX: Hapus margin negatif, ganti dengan margin positif yang konsisten agar tidak tumpang tindih */
 .content-section{
-  background: var(--glass-card); border-radius: 25px; padding: 30px;
-  box-shadow: var(--shadow); padding-top:50px; margin-top:-50px; margin-bottom:40px;
+  background: var(--glass-card); border-radius: 25px; 
+  padding: 30px; 
+  box-shadow: var(--shadow); 
+  margin-top: 30px; 
+  margin-bottom:40px;
 }
 
 .content-section h3{
@@ -152,7 +145,7 @@ body{
 }
 .content-section p{font-size:1rem;line-height:1.6;color:#4a4a4a;margin-bottom:16px}
 
-/* --- GAYA MUSIC CARD (Style Lama) --- */
+/* --- GAYA MUSIC CARD (TETAP) --- */
 .track-list { display: flex; flex-direction: column; gap: 15px; }
 .music-card {
     display: flex; align-items: center; background: white; 
@@ -173,7 +166,7 @@ body{
 /* --- AKHIR MUSIC CARD --- */
 
 
-/* --- FIX: GAYA CAROUSEL FOTO (Ukuran Rapi di Mobile + LOOP Style) --- */
+/* --- FIX: GAYA CAROUSEL FOTO (TETAP) --- */
 .carousel-container { overflow: hidden; margin: 20px 0; }
 .carousel-track {
     display: flex; overflow-x: scroll; scroll-snap-type: x mandatory; 
@@ -198,7 +191,7 @@ body{
 /* --- AKHIR FIX CAROUSEL FOTO --- */
 
 
-/* --- GAYA CHAT FAVORIT (WHATSAPP STAR) --- */
+/* --- GAYA CHAT FAVORIT (TETAP) --- */
 .fav-chat-container { display: flex; flex-direction: column; padding: 10px 0;}
 .fav-chat-bubble { display: inline-block; max-width: 85%; margin-bottom: 15px; margin-left: auto; clear: both;}
 .fav-chat-bubble.right {
@@ -214,7 +207,7 @@ body{
 /* --- AKHIR GAYA CHAT FAVORIT --- */
 
 
-/* --- GAYA CHAT PERTAMA (Style Lama) --- */
+/* --- GAYA CHAT PERTAMA (TETAP) --- */
 .chat-frame{
   background:#f4f4f4; border-radius:20px; padding:15px;
   box-shadow:0 8px 20px rgba(0,0,0,0.1); max-height:400px; overflow-y:auto;
@@ -237,7 +230,7 @@ body{
 .bubble .ts{font-size:.75rem;color:var(--muted);margin-top:4px}
 .bubble.right .ts{color:rgba(255, 255, 255, 0.7);}
 
-/* Animasi Reveal */
+/* Animasi Reveal (TETAP) */
 .reveal-section {
   opacity: 0; transform: translateY(30px); transition: all 1s ease;
 }
