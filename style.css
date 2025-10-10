@@ -18,7 +18,7 @@ body{
   background:linear-gradient(135deg,var(--bg1),var(--bg2));
   color:var(--text-color);
   min-height:100vh;
-  overflow-x:hidden;
+  overflow-x:auto;
 }
 
 .page--stack{max-width:768px;margin:0 auto;padding:20px 16px 80px}
@@ -164,7 +164,7 @@ body{
 
 /* efek teks ketik */
 .typewriter{
-  overflow:hidden;
+  overflow:auto;
   border-right:2px solid var(--accent);
   white-space:nowrap;
   animation:typing 4s steps(40,end), blink .8s infinite;
