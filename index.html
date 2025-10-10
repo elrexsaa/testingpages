@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>01-11-2024</title>
+    
+    <!-- Integrasi Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS DARI style.css - Disesuaikan & Ditingkatkan */
+        :root {
+            --bg1: #fde4e8; /* Background Lebih Pucat */
+            --bg2: #ffe0f0;
+            --accent: #ff6fb5; /* Pink Utama */
+            --glass-card: rgba(255, 255, 255, 0.95); /* Lebih Solid */
+            --muted: #806b72;
+            --shadow: 0 16px 40px rgba(15, 10, 20, 0.15);
+            --text-color: #2f1e2b;
+            --input-focus: #ffc2e4;
+            --font-main: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
+
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            position: relative; /* Penting untuk konteks z-index */
+        }
+
+        /* Container Halaman */
+        .page--center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px; /* Lebar Maksimum untuk Mobile */
+            z-index: 20; /* Pastikan konten login di atas */
+        }
+
+        /* Card Login */
+        .card {
+            background: var(--glass-card);
+            border-radius: 2.5rem; /* Lebih Bulat */
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            width: 100%;
+            transform: translateY(0);
+            transition: transform 0.4s ease-out;
+        }
+
+        /* Icon Chibi - Disederhanakan untuk tampilan mobile yang bersih */
+        .chibi-icon {
+            font-size: 5rem; /* Emoji yang lebih besar */
+            margin-bottom: 1.5rem;
+            line-height: 1;
+        }
+
+        /* Judul */
+        #loginTitle {
+            font-size: 2rem; /* Ukuran Judul Lebih Besar */
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Teks Muted */
+        .muted {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 2.5rem;
+            padding: 0 1rem;
+        }
+
+        /* Input */
+        .input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 1.5rem; /* Lebih Bulat */
+            border: 2px solid #ddd;
+            font-size: 1.1rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 5px rgba(255, 111, 181, 0.2);
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            border-radius: 1.5rem;
+            cursor: pointer;
+            border: none;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            letter-spacing: 0.5px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .btn--primary {
+            background: linear-gradient(90deg, var(--accent), #ff8cc7);
+            color: #fff;
+            box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
+        }
+
+        .btn--primary:active {
+            transform: translateY(1px) scale(0.99);
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.2);
+        }
+
+        /* Verify Frame (Pesan Status) */
+        .verify-frame {
+            position: absolute;
+            left: 50%;
+            top: 20px; /* Posisikan di atas */
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            z-index: 30; /* Pastikan di atas semua (Loading dan Login) */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            min-width: 280px;
+        }
+        .verify-frame[hidden] {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(-20px);
+        }
+        .verify-frame:not([hidden]) {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .verify-frame.ok { background: #4CAF50; } /* Hijau untuk Sukses */
+        .verify-frame.fail { background: #F44336; } /* Merah untuk Gagal */
+        .verify-icon { font-size: 1.2rem; }
+
+        /* Footer Hint */
+        .hint-text {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 2rem;
+        }
+        .hint-text a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        
+        /* Loading Page - PERBAIKAN Z-INDEX DAN POINTER EVENTS */
+        #loadingPage {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        /* Saat loading aktif */
+        #loadingPage[aria-hidden="false"] {
+            opacity: 1;
+            z-index: 999; 
+            pointer-events: auto; 
+        }
+        /* Saat loading tidak aktif, kita pastikan dia tidak mengganggu */
+        #loadingPage[aria-hidden="true"] {
+            z-index: -1; 
+            pointer-events: none; 
+        }
+        
+        #typingText {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loadingPage" aria-hidden="true">
+        <div class="chibi-icon" style="opacity: 0.8;">⏳</div>
+        <div id="typingText"></div>
+    </div>
+
+    <main id="loginPage" class="page--center">
+        <div class="card login-card" role="dialog" aria-labelledby="loginTitle">
+
+            <div class="chibi-icon" aria-hidden="true">
+                🎞️
+            </div>
+
+            <h1 id="loginTitle">All Memories</h1>
+            <p class="muted">halaman ini berisi kenangan pribadi. masukkan kata sandi untuk melanjutkan.</p>
+
+            <label for="pw" class="visually-hidden">Masukkan Password</label>
+            <input id="pw" class="input" type="password" placeholder="password" autocomplete="off" aria-label="kata sandi">
+
+            <button id="btnEnter" class="btn btn--primary" aria-describedby="hint">verifikasi</button>
+            
+            <div id="verifyFrame" class="verify-frame" role="status" aria-live="polite" hidden>
+                <div id="verifyIcon" class="verify-icon" aria-hidden="true"></div>
+                <div id="verifyText" class="verify-text"></div>
+            </div>
+
+            <p class="hint-text" id="hint">
+                kalau lupa, hub author:
+                <a href="https://wa.me/6287896507726" target="_blank">@elgarexsaa</a>
+            </p>
+        </div>
+    </main>
+
+    <script>
+        /* SCRIPT DARI script.js - Logika Verifikasi Halaman Login */
+
+        /* ===== easy settings (ubah di sini) ===== */
+        const PASSWORD_TO_CHANGE = 'nikitaelga2024'; // Ubah password sesuai keinginanmu
+        const AUTHOR_HANDLE = '@elgarexsaa';
+        const TARGET_PAGE = 'kenangan.html'; // Target halaman setelah login
+        const AUTH_KEY = 'kenangan_verified'; // Kunci rahasia untuk localStorage
+        
+        // elements
+        const pw = document.getElementById('pw');
+        const btnEnter = document.getElementById('btnEnter');
+        const verifyFrame = document.getElementById('verifyFrame');
+        const verifyIcon = document.getElementById('verifyIcon');
+        const verifyText = document.getElementById('verifyText');
+        const loginPage = document.getElementById('loginPage');
+        const loadingPage = document.getElementById('loadingPage');
+        const typingText = document.getElementById('typingText');
+
+        // event listeners
+        pw.addEventListener('keydown', (e) => { 
+            if (e.key === 'Enter') {
+                e.preventDefault(); 
+                attemptEnter(); 
+            }
+        });
+        btnEnter.addEventListener('click', attemptEnter);
+        
+        function showVerify(ok, message) {
+            verifyFrame.classList.remove('ok', 'fail');
+            verifyFrame.classList.add(ok ? 'ok' : 'fail');
+            verifyIcon.textContent = ok ? '✔' : '✖';
+            verifyText.textContent = message;
+            
+            verifyFrame.hidden = false;
+            verifyFrame.setAttribute('aria-hidden', 'false');
+
+            setTimeout(() => { 
+                verifyFrame.hidden = true;
+                verifyFrame.setAttribute('aria-hidden', 'true');
+            }, 3500);
+        }
+
+        function attemptEnter(){
+            const v = (pw.value || '').trim();
+            if (v === PASSWORD_TO_CHANGE){
+                showVerify(true, 'verifikasi berhasil, sedang masuk ke halaman...');
+                
+                // === PERBAIKAN: SET AUTH TOKEN DI LOCALSTORAGE ===
+                localStorage.setItem(AUTH_KEY, 'true'); // Simpan token verifikasi
+                
+                loginPage.hidden = true;
+                loadingPage.setAttribute('aria-hidden', 'false');
+                setTimeout(startTypingSequence, 500); 
+            } else {
+                showVerify(false, `verifikasi gagal. hubungi author: ${AUTHOR_HANDLE}`);
+            }
+        }
+
+        function startTypingSequence(){
+            loadingPage.hidden = false; 
+
+            typingText.textContent = '';
+            const text = 'Loading......';
+            let i = 0;
+            const speed = 70;
+
+            const t = setInterval(() => {
+                typingText.textContent += text.charAt(i) || '';
+                i++;
+                if (i > text.length){
+                    clearInterval(t);
+                    
+                    setTimeout(() => {
+                        window.location.href = TARGET_PAGE;
+                    }, 500); 
+                }
+            }, speed);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             loadingPage.hidden = true;
+             loadingPage.setAttribute('aria-hidden', 'true');
+
+             // PERBAIKAN: CEK APAKAH SUDAH TERVERIFIKASI
+             // Jika token ada, lewati halaman login dan langsung ke halaman kenangan
+             if (localStorage.getItem(AUTH_KEY) === 'true') {
+                 console.log("Token ditemukan, langsung menuju halaman kenangan.");
+                 window.location.href = TARGET_PAGE;
+             }
+        });
+    </script>
+
+</body>
+</html>
+

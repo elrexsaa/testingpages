@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>11 Nov 2024</title>
+    
+    <!-- PERHATIAN: Skrip otentikasi harus dijalankan pertama -->
+    <script>
+        const AUTH_KEY = 'kenangan_verified'; // Harus sama dengan index.html
+        const LOGIN_PAGE = 'index.html';
+
+        // Jika tidak ada token verifikasi, tendang kembali ke halaman login
+        if (localStorage.getItem(AUTH_KEY) !== 'true') {
+            window.location.replace(LOGIN_PAGE);
+        }
+
+        // Tambahkan fungsi untuk Logout (opsional, tapi disarankan)
+        function doLogout() {
+            localStorage.removeItem(AUTH_KEY);
+            window.location.replace(LOGIN_PAGE);
+        }
+    </script>
+
+    <!-- Integrasi Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Utama */
+        :root {
+            --bg1: #fde4e8;
+            --bg2: #ffe0f0;
+            --accent: #ff6fb5;
+            --glass-card: rgba(255, 255, 255, 0.9);
+            --muted: #806b72;
+            --shadow: 0 16px 40px rgba(15, 10, 20, 0.15);
+            --text-color: #2f1e2b;
+            --font-main: 'Inter', sans-serif;
+            --font-script: 'Dancing Script', cursive;
+            --header-bg: rgba(255, 255, 255, 0.7);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Layout Utama */
+        .page--stack {
+            max-width: 768px;
+            margin: 0 auto;
+            padding: 20px 16px 80px;
+        }
+
+        /* Header */
+        .mem-header {
+            position: sticky;
+            top: 0;
+            padding: 16px 0;
+            margin-bottom: 24px;
+            background: var(--header-bg);
+            backdrop-filter: blur(5px);
+            z-index: 50;
+        }
+
+        .mem-title h2 {
+            font-family: var(--font-script);
+            font-size: 2.5rem;
+            color: var(--accent);
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+        .mem-title .muted {
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        
+        /* Logout Button - Tambahan */
+        #btnLogout {
+            position: absolute;
+            top: 20px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #btnLogout:hover { background: #fee; }
+
+        /* --- CSS BARU UNTUK COUNTDOWN --- */
+        .countdown-container {
+            text-align: center;
+            background: var(--glass-card);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px; /* Tambah margin bawah sedikit */
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .countdown-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        #countdown {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-color);
+            line-height: 1.2;
+            display: block; /* Memastikan span berada di baris baru */
+        }
+        /* --- AKHIR CSS COUNTDOWN --- */
+
+
+        /* Menu Card Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 640px) {
+            .menu-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background: var(--glass-card);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: left;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 45px rgba(255, 105, 180, 0.25);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        .card-sub {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        /* Section Konten */
+        .content-section {
+            padding-top: 50px; /* Offset untuk sticky header */
+            margin-top: -50px;
+            margin-bottom: 40px;
+        }
+        .content-section h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+        .content-section p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #4a4a4a;
+            margin-bottom: 16px;
+        }
+        
+        /* Galeri Foto */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .gallery img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Audio Player */
+        .track {
+            background: var(--glass-card);
+            padding: 15px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        .track audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Chat Frame */
+        .chat-frame {
+            background: #f4f4f4;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .chat-header {
+            padding: 10px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .contact { font-weight: 700; color: #2f1e2b; }
+        .chat-body { padding: 5px 0; }
+        .bubble {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+        }
+        .bubble.left { align-items: flex-start; }
+        .bubble.right { align-items: flex-end; margin-left: auto; }
+        
+        .bubble .txt {
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 18px 18px 18px 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .bubble.right .txt {
+            background: var(--accent);
+            color: white;
+            border-radius: 18px 18px 4px 18px;
+        }
+        .bubble .ts {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <main id="memoryPage" class="page--stack">
+        
+        <header class="mem-header">
+            <h2 id="greeting">Hi, My Beloved Nikita Friskila Pakpahan💗💗💗</h2>
+            <p class="muted">pilih salah satu album kenangan kita di bawah ini ya!</p>
+            <!-- Tombol Logout -->
+            <button id="btnLogout" onclick="doLogout()">Logout</button>
+        </header>
+
+        <!-- COUNTDOWN TIMER BARU -->
+        <div class="countdown-container">
+            <div class="countdown-title">Waktu Menuju Anniversary Kita!</div>
+            <div id="countdown">Memuat hitung mundur...</div>
+        </div>
+        <!-- AKHIR COUNTDOWN TIMER -->
+
+        <section class="menu-grid" aria-label="menu pilihan">
+            <button class="card card--menu" data-target="#sectionSongs" onclick="scrollToTarget(this)">
+                <div class="card-title">🎵 A Song That Reminds You</div>
+                <div class="card-sub muted">aku selalu ingat kamu kalo puter lagu ini</div>
+            </button>
+
+            <button class="card card--menu" data-target="#sectionPhotos" onclick="scrollToTarget(this)">
+                <div class="card-title">📸 Foto-foto Kita</div>
+                <div class="card-sub muted">galeri kenangan terindah</div>
+            </button>
+
+            <button class="card card--menu" data-target="#sectionChat" onclick="scrollToTarget(this)">
+                <div class="card-title">💬 Chat Waktu Pertama Kali</div>
+                <div class="card-sub muted">awal dari segalanya</div>
+            </button>
+            
+            <button class="card card--menu" data-target="#sectionQuotes" onclick="scrollToTarget(this)">
+                <div class="card-title">📝 Chat Favorit</div>
+                <div class="card-sub muted">chat favorit akuu🤍</div>
+            </button>
+        </section>
+
+        <!-- Bagian Konten -->
+        
+        <div id="sectionSongs" class="content-section">
+            <h3>🎵 A Song That Reminds You</h3>
+            <p>dengarkan 3 lagu ini, lagu-lagu yang mengingatkanku pada kamu, dari masa awal kita sampai sekarang.</p>
+            <div class="track-list">
+                <!-- Karena hanya 1 file audio, kita ulang 3 kali. Ganti path audionya jika ada lebih dari satu. -->
+                <div class="track">
+                    <div class="tmeta">All Of Me - John Legend</div>
+                    <audio controls preload="none" src="sound/sound1.mp3"></audio>
+                </div>
+                <div class="track">
+                    <div class="tmeta">Nina - .Feast</div>
+                    <audio controls preload="none" src="sound/sound2.mp3"></audio>
+                </div>
+                <div class="track">
+                    <div class="tmeta">Kenangan Terindah - Pamungkas</div>
+                    <audio controls preload="none" src="sound/sound3.mp3"></audio>
+                </div>
+            </div>
+        </div>
+
+        <div id="sectionPhotos" class="content-section">
+            <h3>📸 Foto-foto Kita</h3>
+            <p>galeri kenangan terindah dari momen-momen yang tak terlupakan.</p>
+            <div id="gallery" class="gallery" aria-live="polite">
+                <img src="img/f3.jpg" alt="Foto kenangan 1">
+                <img src="img/f7.jpg" alt="Foto kenangan 2">
+                <img src="img/f4.jpg" alt="Foto kenangan 3">
+                <img src="img/f1.jpg" alt="Foto kenangan 4">
+                <img src="img/f6.jpg" alt="Foto kenangan 5">
+                <img src="img/f2.jpg" alt="Foto kenangan 6">
+            </div>
+        </div>
+
+        <div id="sectionChat" class="content-section">
+            <h3>💬 Chat Waktu Pertama Kali</h3>
+            <div class="chat-frame" role="region" aria-label="chat preview">
+                <div class="chat-header">
+                    <div class="contact">elgalau</div>
+                    <div class="status muted">online</div>
+                </div>
+                <div class="chat-body" id="chatBody" tabindex="0">
+                </div>
+            </div>
+            <p class="muted" style="text-align: center; margin-top: 15px;">sore hari di tanggal 03 Agustus 2024</p>
+        </div>
+        
+        <div id="sectionQuotes" class="content-section">
+            <h3>📝 Chat Favorit Aku</h3>
+            <p>beberapa kutipan yang selalu kuingat, yang membuatku semakin mencintaimu:</p>
+            <div class="track" style="border-left: 5px solid var(--accent);">
+                "km kann jagoan nya aku."
+            </div>
+            <div class="track" style="border-left: 5px solid var(--accent);">
+                "yasudaa intinyaa km bisaa, AKUUU YAKINN SAYANGGKU jangan raguin diri km sendirii, gimana km bisa maju, sukses, wujudin smua hal yg km pengen kalau km nya aja sering ga percaya sm diri km sendiri."
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* =============================================================== */
+        /* === COUNTDOWN TIMER LOGIC === */
+        /* =============================================================== */
+        
+        // ** SETTING TGL **
+        // Aku atur default ke 01 November 2025
+        // Format: 'YYYY-MM-DDTHH:MM:SS'
+        const TARGET_DATE = '2025-11-01T00:00:00'; 
+        const targetTime = new Date(TARGET_DATE).getTime();
+        const countdownElement = document.getElementById('countdown');
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetTime - now;
+            
+            // Perhitungan waktu
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            if (distance < 0) {
+                // Jika waktu sudah terlewati
+                clearInterval(countdownInterval);
+                countdownElement.innerHTML = "<span style='color: var(--accent);'>🎉 HAPPY ANNIVERSARY! 🎉</span>";
+            } else {
+                // Tampilkan hitung mundur
+                countdownElement.innerHTML = 
+                    `<span style="color: var(--text-color);">${days}</span> Hari &nbsp;&nbsp; ` + 
+                    `<span style="color: var(--text-color);">${String(hours).padStart(2, '0')}</span> Jam &nbsp;&nbsp; ` + 
+                    `<span style="color: var(--text-color);">${String(minutes).padStart(2, '0')}</span> Menit &nbsp;&nbsp; ` + 
+                    `<span style="color: var(--text-color);">${String(seconds).padStart(2, '0')}</span> Detik`;
+            }
+        }
+
+        // Jalankan fungsi hitung mundur setiap 1 detik
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // Panggil sekali saat dimuat untuk menghindari jeda 1 detik
+
+        /* =============================================================== */
+        /* === SCRIPT DARI script-kenangan.js - Logika Menu & Chat === */
+        /* =============================================================== */
+
+        // chat demo messages (edit di sini untuk mengubah isi chat)
+        const demoChat = [
+            {side: 'left', text: 'kiw kiw', ts: '16:09'},
+            {side: 'right', text: 'tkg paket kah?', ts: '16:10'},
+            {side: 'left', text: 'iya mau nganter paket ini', ts: '16:10'},
+            {side: 'right', text: 'oalaa', ts: '16:11'},
+            {side: 'left', text: 'rumahnya dimana yaa?', ts: '16:12'},
+            {side: 'right', text: 'kan jgo sulap, psti tau dong', ts: '16:13'}
+        ];
+
+        // --- FUNGSI UTAMA ---
+
+        // Fungsi untuk scroll ke target section
+        function scrollToTarget(button) {
+            const targetId = button.getAttribute('data-target');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                // Scroll ke elemen dengan offset untuk header sticky
+                const headerHeight = document.querySelector('.mem-header').offsetHeight;
+                const countdownHeight = document.querySelector('.countdown-container').offsetHeight;
+                // Mengurangi total tinggi area sticky + sedikit margin
+                const offset = targetElement.offsetTop - (headerHeight + countdownHeight) - 20; 
+
+                window.scrollTo({
+                    top: offset,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // populate chat preview
+        function populateChat(){
+            const chatBody = document.getElementById('chatBody');
+            if (!chatBody) return;
+            chatBody.innerHTML = '';
+            demoChat.forEach(m => {
+                const wrap = document.createElement('div');
+                wrap.className = 'bubble ' + (m.side === 'right' ? 'right' : 'left');
+                
+                const txt = document.createElement('div'); 
+                txt.className = 'txt'; 
+                txt.textContent = m.text;
+                
+                const ts = document.createElement('div');
+                ts.className = 'ts';
+                ts.textContent = m.ts;
+
+                wrap.appendChild(txt);
+                wrap.appendChild(ts);
+                chatBody.appendChild(wrap);
+            });
+            // Auto-scroll ke bawah di chat box setelah diisi
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        window.onload = function() {
+            // Jalankan inisialisasi chat setelah halaman dimuat
+            populateChat();
+            
+            // Coba putar audio (opsional)
+            const firstAudio = document.querySelector('.track-list audio');
+            if(firstAudio) {
+                // Mencegah error jika audio tidak bisa diputar otomatis
+                firstAudio.play().catch(()=>{}); 
+            }
+        };
+
+    </script>
+
+</body>
+</html>
+
