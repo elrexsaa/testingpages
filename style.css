@@ -112,20 +112,19 @@ body{
 }
 .content-section p{font-size:1rem;line-height:1.6;color:#4a4a4a;margin-bottom:16px}
 
-/* --- GAYA CAROUSEL FOTO BARU --- */
+/* --- GAYA CAROUSEL FOTO BARU & ESTETIK (FIXED) --- */
 .carousel-container {
     overflow: hidden; 
-    padding: 0 10%; /* Biarkan ruang di samping untuk efek blur */
     margin: 20px 0;
 }
 
 .carousel-track {
     display: flex;
-    overflow-x: scroll; /* Mengizinkan geser horizontal */
-    scroll-snap-type: x mandatory; /* Memaksa snap ke slide */
-    -webkit-overflow-scrolling: touch;
+    overflow-x: scroll; 
+    scroll-snap-type: x mandatory; 
     scroll-behavior: smooth;
-    gap: 16px; /* Jarak antar foto */
+    gap: 20px; /* Jarak antar foto diperlebar */
+    padding: 0 12.5%; /* Memberi ruang di kiri/kanan agar foto tengah pas 75% */
     /* Sembunyikan scrollbar */
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -135,8 +134,8 @@ body{
 }
 
 .carousel-slide {
-    flex: 0 0 80%; /* Setiap slide mengambil 80% lebar container */
-    max-width: 80%;
+    flex: 0 0 75%; /* FOTO FOKUS DIKECILKAN KE 75% */
+    max-width: 75%;
     aspect-ratio: 1 / 1; /* Rasio 1:1 */
     scroll-snap-align: center; /* Snap foto ke tengah */
     transition: all 0.4s ease-in-out;
@@ -150,8 +149,8 @@ body{
     box-shadow: var(--shadow);
     
     /* EFEK BLUR DAN FADE OUT default (saat tidak aktif) */
-    filter: blur(5px) brightness(0.7);
-    transform: scale(0.95);
+    filter: blur(8px) brightness(0.6); /* Blur diperkuat */
+    transform: scale(0.9); /* Scale diperkecil */
     transition: all 0.4s ease-in-out;
 }
 
@@ -159,9 +158,9 @@ body{
 .carousel-slide.active img {
     filter: blur(0) brightness(1); /* Sharp focus */
     transform: scale(1); /* Full size */
-    box-shadow: 0 8px 30px rgba(255,105,180,0.4); /* Bayangan lebih kuat */
+    box-shadow: 0 8px 30px rgba(255,105,181,0.6); /* Bayangan pink yang manis */
 }
-/* --- AKHIR GAYA CAROUSEL FOTO BARU --- */
+/* --- AKHIR GAYA CAROUSEL FOTO BARU & ESTETIK --- */
 
 
 .track{
