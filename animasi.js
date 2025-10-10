@@ -18,8 +18,8 @@ const permanentGreeting = document.getElementById('greeting');
 const GREETING_TEXT = permanentGreeting.textContent;
 
 const TYPING_SPEED = 50; 
-const DELAY_TRANSITION = 700; // Waktu untuk fade in/out (0.5s di CSS + buffer)
-const FINAL_DELAY = 3500; // 3.5 detik (antara 3 sampai 4)
+const DELAY_TRANSITION = 700; 
+const FINAL_DELAY = 3500; 
 
 
 // --- FUNGSI UTILITY: DELAY ---
@@ -133,43 +133,43 @@ function initCarousel(carouselTrack) {
 async function startIntroSequence() {
     // 1. Our Memories Website muncul
     introTitle.classList.add('is-visible'); 
-    await delay(DELAY_TRANSITION * 2); // Tahan 1.4 detik
+    await delay(DELAY_TRANSITION * 2); 
     introTitle.classList.remove('is-visible');
-    await delay(DELAY_TRANSITION); // Jeda 0.7 detik
+    await delay(DELAY_TRANSITION); 
 
     // 2. this is our story muncul dan hilang
     introSubtitle1.classList.add('is-visible');
-    await delay(DELAY_TRANSITION * 2); // Tahan 1.4 detik
+    await delay(DELAY_TRANSITION * 2); 
     introSubtitle1.classList.remove('is-visible');
-    await delay(DELAY_TRANSITION); // Jeda 0.7 detik
+    await delay(DELAY_TRANSITION); 
 
     // 3. hope u like it muncul dan hilang
     introSubtitle2.classList.add('is-visible');
-    await delay(DELAY_TRANSITION * 2); // Tahan 1.4 detik
+    await delay(DELAY_TRANSITION * 2); 
     introSubtitle2.classList.remove('is-visible');
-    await delay(DELAY_TRANSITION); // Jeda 0.7 detik
+    await delay(DELAY_TRANSITION); 
     
     // 4. Jeda sebelum ketik dimulai
     await delay(1000); 
     
-    // 5. Mulai Typing (dengan fungsi baru yang menjamin semua diketik)
+    // 5. Mulai Typing (Dijamin diketik sampai selesai)
     await startTypingEffect();
 }
 
-// --- FIX: FUNGSI TYPING BARU (Menggunakan JS Loop) ---
+// --- FUNGSI TYPING (Menggunakan JS Loop - TETAP AMAN) ---
 function startTypingEffect() {
     return new Promise(async (resolve) => {
         
         // Setup Awal Typing
         introTypingElement.classList.add('is-visible');
         introTypingElement.classList.add('intro-text-typing-effect');
-        introTypingElement.textContent = ""; // Kosongkan dulu
+        introTypingElement.textContent = ""; 
         
         const fullText = GREETING_TEXT; 
         
         for (let i = 0; i < fullText.length; i++) {
             introTypingElement.textContent += fullText.charAt(i);
-            await delay(TYPING_SPEED); // Tunggu per karakter
+            await delay(TYPING_SPEED); 
         }
 
         // Ketikan selesai, hapus kursor
