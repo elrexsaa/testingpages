@@ -35,7 +35,7 @@ body{
   position: fixed; inset: 0;
   background: linear-gradient(135deg, var(--bg1), var(--bg2));
   display: flex; justify-content: center; align-items: center;
-  font-family: var(--font-main); /* Menggunakan font clean default */
+  font-family: var(--font-main); 
   font-size: 2rem; z-index: 9999;
   transition: opacity 0.5s ease;
 }
@@ -52,7 +52,7 @@ body{
 
 /* FIX BOCOR & FONT: Tiga Kalimat Statis (Our Memories, this is our story, hope u like it) */
 .intro-title-static, .intro-subtitle {
-    font-family: var(--font-main); /* <-- MENGGUNAKAN FONT BERSIH (IOS LOOK) */
+    font-family: var(--font-main); /* <-- FONT BERSIH (IOS LOOK) */
     font-weight: 700; 
     font-size: 2rem; /* <-- UKURAN SERAGAM */
     color: var(--text-color); 
@@ -62,13 +62,12 @@ body{
     visibility: hidden; 
     transition: opacity 0.5s ease, visibility 0s 0.5s; 
     
-    position: absolute; /* Untuk positioning */
+    position: absolute; 
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
 }
-/* Hanya intro-title-static yang perlu margin-bottom terpisah */
 .intro-title-static {
     margin-bottom: 10px;
 }
@@ -80,7 +79,6 @@ body{
 .intro-title-static.is-visible, .intro-subtitle.is-visible {
     opacity: 1;
     visibility: visible;
-    /* Reset transisi visibility agar hilang tanpa jeda saat fade out */
     transition: opacity 0.5s ease; 
 }
 
@@ -88,7 +86,7 @@ body{
 /* Style untuk Teks Ketikan (i love u so much💗💗💗) */
 .intro-text {
   font-size: 2.8rem; 
-  font-family: var(--font-script); /* <-- MENGGUNAKAN FONT SCRIPT */
+  font-family: var(--font-script); /* <-- FONT SCRIPT HARUS DI SINI */
   color: var(--accent);
   text-align: center; letter-spacing: 1px; 
   
