@@ -14,36 +14,32 @@ const mainPage = document.querySelector('main');
 const sections = document.querySelectorAll('main > *');
 
 window.addEventListener('load', () => {
-  // disable scroll pas intro
-  document.body.style.overflow = 'auto';
+  document.body.style.overflow = 'hidden';
 
-  // fade out intro
   setTimeout(() => {
     intro.classList.add('fade-out');
     setTimeout(() => {
       intro.style.display = 'none';
       mainPage.classList.remove('hidden');
 
-      // sembunyiin semua section dulu
       sections.forEach(s => s.classList.add('reveal-section'));
 
-      // animasi muncul satu per satu
       let i = 0;
       const showNext = () => {
         if (i < sections.length) {
           sections[i].classList.add('show');
           i++;
-          setTimeout(showNext, 1800);
+          setTimeout(showNext, 1200);
         } else {
-          // enable scroll abis semua muncul
           document.body.style.overflowY = 'auto';
         }
       };
       showNext();
 
     }, 600);
-  }, 2500);
+  }, 3500); // durasi intro nya disini
 });
+
 // animasi intro text
 const texts = [
   "our memories website",
@@ -66,7 +62,7 @@ function showNextText() {
     if (index < texts.length) {
       setTimeout(showNextText, 1000);
     }
-  }, 3000);
+  }, 2500);
 }
 
 showNextText();
