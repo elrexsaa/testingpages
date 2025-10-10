@@ -15,8 +15,8 @@ const introSubtitle1 = document.getElementById('intro-subtitle-1');
 const introSubtitle2 = document.getElementById('intro-subtitle-2'); 
 const introTypingElement = document.getElementById('intro-text-typing');
 
-// PENTING: KITA MENGABAIKAN TEKS DARI KENANGAN.HTML DAN MENGGUNAKAN TEKS INI!
-const GREETING_TEXT = 'i love u so much💗💗💗'; // <-- PERUBAHAN DI SINI!
+// TEKS TYPING YANG DI-HARDCODE (MEMISAHKAN DARI HEADER DI KENANGAN.HTML)
+const GREETING_TEXT = 'i love u so much💗💗💗'; 
 
 const TYPING_SPEED = 50; 
 const DELAY_TRANSITION = 700; 
@@ -157,7 +157,7 @@ async function startIntroSequence() {
     await startTypingEffect();
 }
 
-// --- FUNGSI TYPING (Menggunakan JS Loop - TETAP AMAN) ---
+// --- FUNGSI TYPING (Menggunakan JS Loop - FIX ANIMASI) ---
 function startTypingEffect() {
     return new Promise(async (resolve) => {
         
@@ -166,7 +166,7 @@ function startTypingEffect() {
         introTypingElement.classList.add('intro-text-typing-effect');
         introTypingElement.textContent = ""; 
         
-        const fullText = GREETING_TEXT; // Menggunakan GREETING_TEXT yang sudah di-override
+        const fullText = GREETING_TEXT; 
         
         for (let i = 0; i < fullText.length; i++) {
             introTypingElement.textContent += fullText.charAt(i);
