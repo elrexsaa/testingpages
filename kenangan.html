@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>11 Nov 2024</title>
 
+  <!-- auth -->
   <script>
     const AUTH_KEY = 'kenangan_verified';
     const LOGIN_PAGE = 'index.html';
@@ -17,8 +18,11 @@
     }
   </script>
 
+  <!-- fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+  <!-- style -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,7 +34,7 @@
   <!-- love bg -->
   <div class="bg-hearts"></div>
 
-  <!-- satu main aja -->
+  <!-- main content -->
   <main class="page--stack hidden">
     <header class="mem-header fade-in">
       <h2 id="greeting" class="typewriter">Hi, My Beloved Nikita Friskila Pakpahan💗💗💗</h2>
@@ -106,10 +110,11 @@
   <!-- bg music -->
   <audio id="bgm" src="audio.mp3" autoplay loop></audio>
 
+  <!-- scripts -->
   <script src="script.js"></script>
   <script src="animasi.js"></script>
   <script>
-    // auto play audio pas user klik
+    // auto play audio
     const bgm = document.getElementById('bgm');
     document.addEventListener('click', () => {
       bgm.play();
