@@ -9,8 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
-  
-  </head>
+</head>
 <body>
   <div class="intro-screen">
     <div id="intro-text" class="intro-text"></div>
@@ -19,18 +18,18 @@
   <div class="bg-hearts"></div>
 
   <main class="page--stack hidden">
-    <header class="mem-header fade-in">
+    <header class="mem-header reveal-section">
       <h2 id="greeting" class="typewriter">Hi, My Beloved Nikita Friskila Pakpahan💗💗💗</h2>
       <p class="muted">pilih salah satu album kenangan kita di bawah ini ya!</p>
       <button id="btnLogout" onclick="doLogout()">Logout</button>
     </header>
 
-    <div class="countdown-container fade-up">
+    <div class="countdown-container reveal-section">
       <div class="countdown-title">Waktu Menuju Anniversary Kita!</div>
       <div id="countdown">Memuat hitung mundur...</div>
     </div>
 
-    <section class="menu-grid fade-up">
+    <section class="menu-grid reveal-section">
       <button class="card card--menu" data-target="#sectionSongs" onclick="scrollToTarget(this)">
         <div class="card-title">🎵 A Song That Reminds You</div>
         <div class="card-sub muted">aku selalu ingat kamu kalo puter lagu ini</div>
@@ -49,7 +48,7 @@
       </button>
     </section>
 
-    <div id="sectionSongs" class="content-section fade-up">
+    <div id="sectionSongs" class="content-section reveal-section">
       <h3>🎵 A Song That Reminds You</h3>
       <p>dengarkan 3 lagu ini, lagu-lagu yang mengingatkanku pada kamu, dari masa awal kita sampai sekarang.</p>
       <div class="track-list">
@@ -59,16 +58,23 @@
       </div>
     </div>
 
-    <div id="sectionPhotos" class="content-section fade-up">
+    <div id="sectionPhotos" class="content-section reveal-section">
       <h3>📸 Foto-foto Kita</h3>
-      <p>galeri kenangan terindah dari momen-momen yang tak terlupakan.</p>
-      <div class="gallery">
-        <img src="img/f3.jpg"><img src="img/f7.jpg"><img src="img/f4.jpg">
-        <img src="img/f1.jpg"><img src="img/f6.jpg"><img src="img/f2.jpg">
+      <p>galeri kenangan terindah dari momen-momen yang tak terlupakan. (Geser ke samping untuk lihat semua)</p>
+      
+      <div class="carousel-container">
+        <div class="carousel-track">
+          <div class="carousel-slide"><img src="img/f3.jpg" alt="Foto Kenangan 1"></div>
+          <div class="carousel-slide"><img src="img/f7.jpg" alt="Foto Kenangan 2"></div>
+          <div class="carousel-slide"><img src="img/f4.jpg" alt="Foto Kenangan 3"></div>
+          <div class="carousel-slide"><img src="img/f1.jpg" alt="Foto Kenangan 4"></div>
+          <div class="carousel-slide"><img src="img/f6.jpg" alt="Foto Kenangan 5"></div>
+          <div class="carousel-slide"><img src="img/f2.jpg" alt="Foto Kenangan 6"></div>
+        </div>
       </div>
-    </div>
+      </div>
 
-    <div id="sectionChat" class="content-section fade-up">
+    <div id="sectionChat" class="content-section reveal-section">
       <h3>💬 Chat Waktu Pertama Kali</h3>
       <div class="chat-frame">
         <div class="chat-header">
@@ -80,7 +86,7 @@
       <p class="muted" style="text-align:center;margin-top:15px;">sore hari di tanggal 03 Agustus 2024</p>
     </div>
 
-    <div id="sectionQuotes" class="content-section fade-up">
+    <div id="sectionQuotes" class="content-section reveal-section">
       <h3>📝 Chat Favorit Aku</h3>
       <p>beberapa kutipan yang selalu kuingat, yang membuatku semakin mencintaimu:</p>
       <div class="track" style="border-left:5px solid var(--accent);">"km kann jagoan nya aku."</div>
@@ -99,7 +105,7 @@
     const AUTH_KEY = 'kenangan_verified';
     const LOGIN_PAGE = 'index.html';
     
-    // Periksa otorisasi setelah semua elemen dimuat
+    // Periksa otorisasi
     if (localStorage.getItem(AUTH_KEY) !== 'true') {
       window.location.replace(LOGIN_PAGE);
     }
@@ -108,12 +114,6 @@
       localStorage.removeItem(AUTH_KEY);
       window.location.replace(LOGIN_PAGE);
     }
-
-    // auto play audio
-    const bgm = document.getElementById('bgm');
-    document.addEventListener('click', () => {
-      bgm.play();
-    });
   </script>
 </body>
 </html>
