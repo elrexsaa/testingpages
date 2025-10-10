@@ -27,6 +27,28 @@ body{
   position:sticky;top:0;padding:16px 0;margin-bottom:24px;
   background:var(--header-bg);backdrop-filter:blur(5px);z-index:50;
 }
+
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  background: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.intro-screen.fade-out {
+  opacity: 0;
+}
+
+.hidden {
+  display: none;
+}
+
 .mem-header h2{
   font-family:var(--font-script);
   font-size:2.5rem;
