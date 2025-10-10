@@ -27,7 +27,7 @@ function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// --- 1. SETUP HEARTS ---
+// --- SETUP HEARTS (TETAP) ---
 for (let i = 0; i < 30; i++) {
   const heart = document.createElement('span');
   heart.innerHTML = '❤';
@@ -38,7 +38,7 @@ for (let i = 0; i < 30; i++) {
 }
 
 
-// --- FUNGSIONALITAS AUDIO: SINGLE PLAY (TETAP SAMA) ---
+// --- FUNGSIONALITAS AUDIO (TETAP) ---
 function stopAllAudio(currentPlaying) {
     if (currentPlaying !== bgm && !bgm.paused) { bgm.pause(); }
     allTracks.forEach(track => {
@@ -71,7 +71,7 @@ function setupAudioListeners() {
 window.addEventListener('load', setupAudioListeners);
 
 
-// --- LOGIKA CAROUSEL FOTO INFINITE LOOP (TETAP SAMA) ---
+// --- LOGIKA CAROUSEL FOTO (TETAP) ---
 function initCarousel(carouselTrack) {
     const slides = carouselTrack.querySelectorAll('.carousel-slide');
     if (slides.length === 0) return;
@@ -129,7 +129,7 @@ function initCarousel(carouselTrack) {
 }
 
 
-// --- 1. LOGIKA ANIMASI INTRO (Alur yang diminta - FADE IN/OUT BERGANTIAN) ---
+// --- 1. LOGIKA ANIMASI INTRO (FADE IN/OUT BERGANTIAN) ---
 async function startIntroSequence() {
     // 1. Our Memories Website muncul
     introTitle.classList.add('is-visible'); 
@@ -149,50 +149,52 @@ async function startIntroSequence() {
     introSubtitle2.classList.remove('is-visible');
     await delay(DELAY_TRANSITION); // Jeda 0.7 detik
     
-    // 4. Jeda sebelum ketik dimulai (Jeda 1 detik seperti permintaan sebelumnya)
+    // 4. Jeda sebelum ketik dimulai
     await delay(1000); 
     
-    // 5. Mulai Typing
+    // 5. Mulai Typing (dengan fungsi baru yang menjamin semua diketik)
     await startTypingEffect();
 }
 
+// --- FIX: FUNGSI TYPING BARU (Menggunakan JS Loop) ---
 function startTypingEffect() {
-    return new Promise(resolve => {
-        // Teks ketikan muncul di tengah
-        introTypingElement.textContent = GREETING_TEXT; 
+    return new Promise(async (resolve) => {
+        
+        // Setup Awal Typing
         introTypingElement.classList.add('is-visible');
         introTypingElement.classList.add('intro-text-typing-effect');
-    
-        // Hitung durasi typing
-        const typingDuration = GREETING_TEXT.length * TYPING_SPEED + 500; // Ditambah 0.5s buffer
-    
-        setTimeout(() => {
-            // Ketikan selesai, hapus kursor
-            introTypingElement.classList.remove('intro-text-typing-effect');
+        introTypingElement.textContent = ""; // Kosongkan dulu
+        
+        const fullText = GREETING_TEXT; 
+        
+        for (let i = 0; i < fullText.length; i++) {
+            introTypingElement.textContent += fullText.charAt(i);
+            await delay(TYPING_SPEED); // Tunggu per karakter
+        }
+
+        // Ketikan selesai, hapus kursor
+        introTypingElement.classList.remove('intro-text-typing-effect');
+        
+        // TUNDA FINAL DELAY (3.5 detik)
+        await delay(FINAL_DELAY); 
+
+        // FADE OUT INTRO SCREEN
+        introScreenOverlay.classList.add('fade-out'); 
+        
+        await delay(500); // Waktu fade out
             
-            // TUNDA FINAL DELAY (3.5 detik)
-            setTimeout(() => {
-                // FADE OUT INTRO SCREEN
-                introScreenOverlay.classList.add('fade-out'); 
+        introScreenOverlay.style.display = 'none'; 
+        mainPage.classList.remove('hidden'); 
+        document.body.style.overflowY = 'auto'; 
                 
-                setTimeout(() => {
-                    introScreenOverlay.style.display = 'none'; 
-                    mainPage.classList.remove('hidden'); 
-                    document.body.style.overflowY = 'auto'; 
-                    
-                    // MEMULAI REVEAL SERENTAK
-                    startMemoryReveal();
-                    resolve(); // Resolusi promise setelah semua selesai
-                }, 500); // Waktu fade out
-                
-            }, FINAL_DELAY); 
-    
-        }, typingDuration);
+        // MEMULAI REVEAL SERENTAK
+        startMemoryReveal();
+        resolve();
     });
 }
 
 
-// --- 2. LOGIKA REVEAL SERENTAK (FADE IN) (TETAP SAMA) ---
+// --- 2. LOGIKA REVEAL SERENTAK (TETAP) ---
 function startMemoryReveal() {
     const allRevealSections = document.querySelectorAll('.reveal-section');
     
@@ -207,7 +209,7 @@ function startMemoryReveal() {
 }
 
 
-// --- 3. START POINT ---
+// --- 3. START POINT (TETAP) ---
 window.addEventListener('load', () => {
   document.body.style.overflow = 'hidden';
   introScreenOverlay.style.display = 'flex'; 
