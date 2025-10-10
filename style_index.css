@@ -50,6 +50,24 @@ body {
     transition: transform 0.4s ease-out;
 }
 
+/* --- ANIMASI GETAR (SHAKE) --- */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+}
+
+.shake-effect {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0); 
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+/* --- AKHIR ANIMASI GETAR --- */
+
 /* Icon Chibi */
 .chibi-icon {
     font-size: 5rem; 
@@ -73,7 +91,7 @@ body {
     padding: 0 1rem;
 }
 
-/* --- PERBAIKAN INPUT: WRAPPER UNTUK ICON MATA --- */
+/* INPUT DAN ICON MATA */
 .input-wrapper {
     position: relative;
     width: 100%;
@@ -82,7 +100,7 @@ body {
 .input {
     width: 100%;
     padding: 1rem 1.5rem;
-    padding-right: 3.5rem; /* Tambahkan padding agar tidak menutupi ikon */
+    padding-right: 3.5rem; 
     border-radius: 1.5rem; 
     border: 2px solid #ddd;
     font-size: 1.1rem;
@@ -97,7 +115,6 @@ body {
     box-shadow: 0 0 0 5px rgba(255, 111, 181, 0.2);
 }
 
-/* ICON MATA (TOGGLE PASSWORD) */
 #togglePw {
     position: absolute;
     right: 1.5rem;
@@ -112,7 +129,6 @@ body {
 #togglePw:hover {
     color: var(--accent);
 }
-/* --- AKHIR PERBAIKAN INPUT --- */
 
 
 /* Button */
@@ -136,45 +152,45 @@ body {
     box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
 }
 
-/* Animasi Bergerak pada Tombol Verifikasi */
 .btn--primary:hover {
-    transform: translateY(-2px); /* Sedikit naik saat hover */
-    box-shadow: 0 16px 35px rgba(255, 105, 180, 0.5); /* Bayangan lebih tebal */
+    transform: translateY(-2px); 
+    box-shadow: 0 16px 35px rgba(255, 105, 180, 0.5); 
 }
 
 .btn--primary:active {
-    transform: translateY(1px) scale(0.98); /* Sedikit ditekan saat diklik */
+    transform: translateY(1px) scale(0.98); 
     box-shadow: 0 8px 20px rgba(255, 105, 180, 0.2);
 }
 
-/* Verify Frame (Pesan Status) */
+/* --- PERBAIKAN POSISI POP-UP ERROR (DI TENGAH) --- */
 .verify-frame {
-    position: absolute;
+    position: fixed; /* Ubah ke fixed agar di tengah layar */
     left: 50%;
-    top: 20px; 
-    transform: translateX(-50%);
+    top: 50%; /* Posisikan di tengah vertikal */
+    transform: translate(-50%, -50%); /* Centering sempurna */
     display: flex;
     gap: 12px;
     align-items: center;
-    padding: 12px 20px;
-    border-radius: 15px;
-    font-size: 0.9rem;
+    padding: 15px 25px; 
+    border-radius: 18px;
+    font-size: 1rem; 
     font-weight: 600;
     color: white;
     z-index: 30; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     transition: opacity 0.3s ease, transform 0.3s ease;
     min-width: 280px;
 }
 .verify-frame[hidden] {
     opacity: 0;
     pointer-events: none;
-    transform: translateX(-50%) translateY(-20px);
+    transform: translate(-50%, -60%); /* Transisi dari atas saat hilang */
 }
 .verify-frame:not([hidden]) {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translate(-50%, -50%);
 }
+/* --- AKHIR PERBAIKAN POSISI POP-UP ERROR --- */
 
 .verify-frame.ok { background: #4CAF50; } 
 .verify-frame.fail { background: #F44336; } 
@@ -221,7 +237,6 @@ body {
     margin-top: 20px;
 }
 
-/* Kelas untuk menyembunyikan elemen secara visual */
 .visually-hidden {
     position: absolute;
     width: 1px;
