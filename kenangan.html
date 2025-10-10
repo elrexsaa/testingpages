@@ -20,8 +20,39 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* animasi cinematic */
+    .fade-in, .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1.4s ease, transform 1.4s ease;
+    }
+    .show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body {
+      background: black;
+      color: white;
+      transition: background 1s ease;
+    }
+
+    main {
+      animation: fadeInBody 2s ease forwards;
+    }
+
+    @keyframes fadeInBody {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- bg music -->
+  <audio id="bgm" src="sound/audio.mp3" autoplay loop></audio>
 
   <main class="page--stack">
     <header class="mem-header fade-in">
@@ -93,9 +124,28 @@
         "yasudaa intinyaa km bisaa, AKUUU YAKINN SAYANGGKU..."
       </div>
     </div>
-
   </main>
 
   <script src="script.js"></script>
+
+  <script>
+    // animasi scroll muncul kaya film
+    const elements = document.querySelectorAll('.fade-in, .fade-up');
+    window.addEventListener('scroll', () => {
+      const trigger = window.innerHeight * 0.8;
+      elements.forEach(el => {
+        const top = el.getBoundingClientRect().top;
+        if (top < trigger) {
+          el.classList.add('show');
+        }
+      });
+    });
+
+    // auto play audio
+    const bgm = document.getElementById('bgm');
+    document.addEventListener('click', () => {
+      bgm.play();
+    });
+  </script>
 </body>
 </html>
