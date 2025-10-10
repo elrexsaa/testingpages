@@ -26,7 +26,8 @@ function scrollToTarget(button){
   const targetId = button.getAttribute('data-target');
   const targetElement = document.querySelector(targetId);
   if(targetElement){
-    const offset = targetElement.offsetTop - 50; 
+    const headerHeight = document.querySelector('.mem-header').offsetHeight;
+    const offset = targetElement.offsetTop - headerHeight - 10; 
     window.scrollTo({top:offset,behavior:'smooth'});
   }
 }
