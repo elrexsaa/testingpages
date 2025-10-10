@@ -6,9 +6,15 @@
   --glass-card: rgba(255, 255, 255, 0.9);
   --muted: #806b72;
   --shadow: 0 16px 40px rgba(15, 10, 20, 0.15);
+  
   --text-color: #2f1e2b;
-  --font-main: 'Inter', sans-serif;
-  --font-script: 'SF Pro', cursive;
+  
+  /* FONT UTAMA (UNTUK LOOK BERSIH/IOS) */
+  --font-main: system-ui, 'Inter', sans-serif; 
+  
+  /* FONT SCRIPT (UNTUK TYPING/HEADER) */
+  --font-script: 'Dancing Script', cursive; 
+  
   --header-bg: rgba(255, 255, 255, 0.7);
 }
 
@@ -29,7 +35,8 @@ body{
   position: fixed; inset: 0;
   background: linear-gradient(135deg, var(--bg1), var(--bg2));
   display: flex; justify-content: center; align-items: center;
-  font-family: var(--font-script); font-size: 2rem; z-index: 9999;
+  font-family: var(--font-main); /* Menggunakan font clean default */
+  font-size: 2rem; z-index: 9999;
   transition: opacity 0.5s ease;
 }
 
@@ -43,40 +50,53 @@ body{
     padding: 20px;
 }
 
-/* FIX FONT SIZE: Menyamakan ukuran menjadi 2rem untuk Our Memories Website */
-.intro-title-static {
-    font-family: var(--font-script); 
+/* FIX BOCOR & FONT: Tiga Kalimat Statis (Our Memories, this is our story, hope u like it) */
+.intro-title-static, .intro-subtitle {
+    font-family: var(--font-main); /* <-- MENGGUNAKAN FONT BERSIH (IOS LOOK) */
     font-weight: 700; 
     font-size: 2rem; /* <-- UKURAN SERAGAM */
-    color: var(--text-color); margin-bottom: 10px;
+    color: var(--text-color); 
+    
+    /* FIX BOCOR AWAL: SEMBUNYIKAN DI CSS SEJAK AWAL */
     opacity: 0; 
-    transition: opacity 0.5s ease;
-}
-/* FIX FONT SIZE: Menyamakan ukuran menjadi 2rem untuk 2 kalimat statis lainnya */
-.intro-subtitle {
-    font-family: var(--font-script); 
-    font-weight: 700; 
-    font-size: 2rem; /* <-- UKURAN SERAGAM */
-    color: var(--text-color); margin-top: 5px;
-    opacity: 0; 
-    transition: opacity 0.5s ease;
-    position: absolute; 
+    visibility: hidden; 
+    transition: opacity 0.5s ease, visibility 0s 0.5s; 
+    
+    position: absolute; /* Untuk positioning */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
 }
+/* Hanya intro-title-static yang perlu margin-bottom terpisah */
+.intro-title-static {
+    margin-bottom: 10px;
+}
+.intro-subtitle {
+    margin-top: 5px;
+}
+
+/* Kelas yang ditambahkan JS saat elemen harus muncul */
 .intro-title-static.is-visible, .intro-subtitle.is-visible {
     opacity: 1;
+    visibility: visible;
+    /* Reset transisi visibility agar hilang tanpa jeda saat fade out */
+    transition: opacity 0.5s ease; 
 }
+
 
 /* Style untuk Teks Ketikan (i love u so much💗💗💗) */
 .intro-text {
   font-size: 2.8rem; 
-  font-family: var(--font-script); 
+  font-family: var(--font-script); /* <-- MENGGUNAKAN FONT SCRIPT */
   color: var(--accent);
-  text-align: center; letter-spacing: 1px; opacity: 0; 
-  transition: opacity 0.8s ease-in-out; 
+  text-align: center; letter-spacing: 1px; 
+  
+  /* FIX BOCOR AWAL: SEMBUNYIKAN DI CSS SEJAK AWAL */
+  opacity: 0; 
+  visibility: hidden;
+  transition: opacity 0.8s ease-in-out, visibility 0s 0.8s; 
+  
   position: absolute; 
   top: 50%;
   left: 50%;
@@ -91,14 +111,13 @@ body{
   overflow: hidden;
   white-space: nowrap;
 }
-/* FIX MOBILE: Sesuaikan ukuran font untuk layar yang lebih kecil */
-@media (max-width: 420px) {
-    .intro-text { 
-        font-size: 1.8rem; 
-    }
+
+.intro-text.is-visible { 
+    opacity: 1; 
+    visibility: visible;
+    transition: opacity 0.8s ease-in-out;
 }
 
-.intro-text.is-visible { opacity: 1; }
 .intro-text-typing-effect {
     border-right: 2px solid var(--accent);
     animation: blink .8s infinite;
