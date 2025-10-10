@@ -63,4 +63,3 @@ function populateChat(){
 }
 
 window.addEventListener('load', populateChat);
-});
