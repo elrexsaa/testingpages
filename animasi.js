@@ -1,131 +1,22 @@
 /* --- MULAI COPY PASTE SELURUHNYA KE FILE animasi.js --- */
 
 // --- INISIASI & SETUP ---
-const bg = document.querySelector('.bg-hearts');
+// RESTORE: Mengambil elemen background hearts
+const bg = document.querySelector('.bg-hearts'); 
 const introScreenOverlay = document.querySelector('.intro-screen'); 
 const mainPage = document.querySelector('main');
 
-// Seleksi elemen spesifik untuk animasi berurutan
-const header = document.querySelector('.mem-header');
-const countdownContainer = document.querySelector('.countdown-container');
-const menuGrid = document.querySelector('.menu-grid');
-const contentSections = document.querySelectorAll('.content-section'); 
-
 // Elemen Audio
 const bgm = document.getElementById('bgm');
-// FIX: MENGGANTI SELECTOR AGAR SESUAI DENGAN CLASS BARU (music-card)
-const allTracks = document.querySelectorAll('.music-card audio'); // <- SUDAH DIPERBAIKI
+const allTracks = document.querySelectorAll('.music-card audio'); 
 
-const introTexts = [
-  "our memories website",
-  "this is our story",
-  "hope u like it"
-];
+// Elemen Animasi Intro
+const introTypingElement = document.getElementById('intro-text-typing');
+const permanentGreeting = document.getElementById('greeting');
+const GREETING_TEXT = permanentGreeting.textContent;
 
-let textIndex = 0;
-const introTextElement = document.getElementById('intro-text');
-const TEXT_DISPLAY_DURATION = 2500; 
-const TEXT_FADE_DURATION = 800;    
-const INITIAL_DELAY = 1000; 
-const SECTION_DELAY = 800;  
-
-
-// --- FUNGSIONALITAS AUDIO: SINGLE PLAY ---
-function stopAllAudio(currentPlaying) {
-    // 1. Stop BGM jika lagu di daftar diputar
-    if (currentPlaying !== bgm && !bgm.paused) {
-        bgm.pause();
-    }
-
-    // 2. Stop semua lagu di daftar jika ada yang lain diputar
-    allTracks.forEach(track => {
-        if (track !== currentPlaying && !track.paused) {
-            track.pause();
-            track.currentTime = 0; 
-        }
-    });
-
-    // 3. Jika yang diputar adalah BGM, stop semua lagu di daftar
-    if (currentPlaying === bgm) {
-        allTracks.forEach(track => {
-            if (!track.paused) {
-                track.pause();
-                track.currentTime = 0;
-            }
-        });
-    }
-}
-
-function setupAudioListeners() {
-    // Event listener untuk BGM
-    bgm.addEventListener('play', () => stopAllAudio(bgm));
-    
-    // Event listener untuk setiap lagu di daftar (SUDAH BENAR)
-    allTracks.forEach(track => {
-        track.addEventListener('play', () => stopAllAudio(track));
-    });
-
-    // Autoplay BGM saat ada klik pertama
-    document.addEventListener('click', function handler() {
-        if (bgm.paused) {
-            bgm.play().catch(e => console.log('Autoplay blocked.'));
-        }
-        document.removeEventListener('click', handler);
-    });
-}
-window.addEventListener('load', setupAudioListeners);
-
-
-// --- FUNGSIONALITAS CAROUSEL FOTO ---
-function initCarousel(carouselTrack) {
-    const slides = carouselTrack.querySelectorAll('.carousel-slide');
-    if (slides.length === 0) return;
-
-    let autoSlideTimer;
-    let currentIndex = 0;
-    
-    const slideWidth = slides[0].offsetWidth + 20; // 20 adalah gap
-    const TRACK_CENTER_OFFSET = slideWidth;
-
-    function updateActiveSlide() {
-        const scrollLeft = carouselTrack.scrollLeft;
-        
-        const centerIndex = Math.round(scrollLeft / slideWidth); 
-
-        slides.forEach(slide => slide.classList.remove('active'));
-
-        if (slides[centerIndex]) {
-            slides[centerIndex].classList.add('active');
-            currentIndex = centerIndex;
-        }
-    }
-
-    function nextSlide() {
-        currentIndex = (currentIndex + 1) % slides.length;
-        carouselTrack.scroll({
-            left: currentIndex * slideWidth,
-            behavior: 'smooth'
-        });
-        setTimeout(updateActiveSlide, 450); 
-    }
-    
-    function startAutoSlide() {
-        clearInterval(autoSlideTimer); 
-        autoSlideTimer = setInterval(nextSlide, 5000); 
-    }
-    
-    carouselTrack.addEventListener('scroll', () => {
-        updateActiveSlide(); 
-        clearInterval(autoSlideTimer);
-        autoSlideTimer = setInterval(nextSlide, 5000);
-    });
-
-    carouselTrack.scrollLeft = 0;
-    setTimeout(() => {
-        updateActiveSlide();
-        startAutoSlide();
-    }, 100); 
-}
+const TYPING_SPEED = 50; 
+const AFTER_TYPING_DELAY = 1500; 
 
 
 // --- 1. SETUP HEARTS (kode love random) ---
@@ -138,80 +29,156 @@ for (let i = 0; i < 30; i++) {
   bg.appendChild(heart);
 }
 
-// --- 2. LOGIKA ANIMASI TEKS INTRO (FADE IN/OUT LOOP) ---
-function showNextText() {
-  if (textIndex >= introTexts.length) {
-    
-    // --- AKHIR ANIMASI: SEMBUNYIKAN INTRO SCREEN ---
-    setTimeout(() => {
-      introScreenOverlay.classList.add('fade-out'); 
-      
-      setTimeout(() => {
-        introScreenOverlay.style.display = 'none'; 
-        mainPage.classList.remove('hidden'); 
-        document.body.style.overflowY = 'auto'; 
-        
-        // --- MEMULAI SEQUENTIAL REVEAL ---
-        startMemoryReveal();
-      }, 500); 
-      
-    }, TEXT_DISPLAY_DURATION + TEXT_FADE_DURATION);
 
-    return;
-  }
-
-  introTextElement.textContent = introTexts[textIndex];
-  introTextElement.classList.add('is-visible');
-
-  setTimeout(() => {
-    introTextElement.classList.remove('is-visible'); 
-    setTimeout(() => {
-      textIndex++;
-      showNextText();
-    }, TEXT_FADE_DURATION); 
-  }, TEXT_DISPLAY_DURATION); 
-}
-
-
-// --- 3. LOGIKA REVEAL SEQUENTIAL (VIDEO EFFECT) ---
-function startMemoryReveal() {
-    setTimeout(() => {
-        header.classList.add('show');
-    }, INITIAL_DELAY);
-
-    setTimeout(() => {
-        countdownContainer.classList.add('show');
-    }, INITIAL_DELAY + SECTION_DELAY);
-
-    setTimeout(() => {
-        menuGrid.classList.add('show');
-    }, INITIAL_DELAY + SECTION_DELAY * 2);
-
-    // Step 4: Reveal Content Sections satu per satu
-    setTimeout(() => {
-        contentSections.forEach((section, index) => {
-            const delay = SECTION_DELAY * (index + 3);
-            setTimeout(() => {
-                section.classList.add('show');
-                
-                if (section.id === 'sectionPhotos') {
-                    const carouselTrack = section.querySelector('.carousel-track');
-                    if (carouselTrack) {
-                        setTimeout(() => initCarousel(carouselTrack), 1300); 
-                    }
-                }
-
-            }, delay); 
+// --- FUNGSIONALITAS AUDIO: SINGLE PLAY ---
+function stopAllAudio(currentPlaying) {
+    if (currentPlaying !== bgm && !bgm.paused) { bgm.pause(); }
+    allTracks.forEach(track => {
+        if (track !== currentPlaying && !track.paused) {
+            track.pause();
+            track.currentTime = 0; 
+        }
+    });
+    if (currentPlaying === bgm) {
+        allTracks.forEach(track => {
+            if (!track.paused) {
+                track.pause();
+                track.currentTime = 0;
+            }
         });
-    }, INITIAL_DELAY); 
+    }
+}
+function setupAudioListeners() {
+    bgm.addEventListener('play', () => stopAllAudio(bgm));
+    allTracks.forEach(track => {
+        track.addEventListener('play', () => stopAllAudio(track));
+    });
+    document.addEventListener('click', function handler() {
+        if (bgm.paused) {
+            bgm.play().catch(e => console.log('Autoplay blocked.'));
+        }
+        document.removeEventListener('click', handler);
+    });
+}
+window.addEventListener('load', setupAudioListeners);
+
+
+// --- FIX: LOGIKA CAROUSEL FOTO INFINITE LOOP ---
+function initCarousel(carouselTrack) {
+    const slides = carouselTrack.querySelectorAll('.carousel-slide');
+    if (slides.length === 0) return;
+
+    // Kloning slide untuk membuat loop yang mulus
+    const cloneCount = 3; 
+    for (let i = 0; i < cloneCount; i++) {
+        const clone = slides[i].cloneNode(true);
+        clone.classList.remove('active');
+        carouselTrack.appendChild(clone);
+    }
+
+    const allSlides = carouselTrack.querySelectorAll('.carousel-slide');
+    let currentIndex = 0;
+    const slideWidth = allSlides[0].offsetWidth + 15; // + gap
+
+    function updateActiveSlide() {
+        const scrollLeft = carouselTrack.scrollLeft;
+        const centerIndex = Math.round(scrollLeft / slideWidth); 
+
+        allSlides.forEach(slide => slide.classList.remove('active'));
+
+        if (allSlides[centerIndex]) {
+            allSlides[centerIndex].classList.add('active');
+            currentIndex = centerIndex;
+
+            // Logika Jump (Infinite Loop)
+            if (currentIndex >= slides.length) {
+                setTimeout(() => {
+                    carouselTrack.scrollLeft = 0;
+                    currentIndex = 0;
+                    allSlides.forEach(slide => slide.classList.remove('active'));
+                    allSlides[0].classList.add('active');
+                }, 400); 
+            }
+        }
+    }
+    
+    let autoSlideTimer;
+    function startAutoSlide() {
+        clearInterval(autoSlideTimer); 
+        autoSlideTimer = setInterval(() => {
+            const nextScroll = (currentIndex + 1) * slideWidth;
+            carouselTrack.scroll({
+                left: nextScroll,
+                behavior: 'smooth'
+            });
+        }, 3500); 
+    }
+
+    carouselTrack.addEventListener('scroll', updateActiveSlide);
+    carouselTrack.scrollLeft = 0;
+    setTimeout(() => {
+        updateActiveSlide();
+        startAutoSlide();
+    }, 100); 
 }
 
 
-// --- 4. START POINT ---
+// --- 1. LOGIKA ANIMASI KETIK (TYPEWRITER) DI TENGAH ---
+function startTypingAnimation() {
+    introTypingElement.textContent = GREETING_TEXT; 
+    introTypingElement.classList.add('is-visible');
+    
+    // Tambahkan class untuk efek typewriter
+    introTypingElement.classList.add('intro-text-typing-effect');
+
+    // Hitung durasi typing
+    const duration = GREETING_TEXT.length * TYPING_SPEED + 1000;
+
+    setTimeout(() => {
+        // Hilangkan border typing setelah selesai
+        introTypingElement.classList.remove('intro-text-typing-effect');
+        
+        // Teks sudah muncul semua, tunggu sebentar
+        setTimeout(() => {
+            // FADE OUT INTRO SCREEN
+            introScreenOverlay.classList.add('fade-out'); 
+            
+            setTimeout(() => {
+                introScreenOverlay.style.display = 'none'; 
+                mainPage.classList.remove('hidden'); 
+                document.body.style.overflowY = 'auto'; 
+                
+                // --- MEMULAI REVEAL SERENTAK ---
+                startMemoryReveal();
+            }, 500); // Waktu fade out
+            
+        }, AFTER_TYPING_DELAY); 
+
+    }, duration);
+}
+
+
+// --- 2. LOGIKA REVEAL SERENTAK (FADE IN) ---
+function startMemoryReveal() {
+    const allRevealSections = document.querySelectorAll('.reveal-section');
+    
+    // Reveal SEMUA elemen sekaligus
+    allRevealSections.forEach(section => {
+        section.classList.add('show');
+    });
+
+    // Inisiasi Carousel (harus setelah elemen muncul)
+    const carouselTrack = document.querySelector('#sectionPhotos .carousel-track');
+    if (carouselTrack) {
+        setTimeout(() => initCarousel(carouselTrack), 1000); 
+    }
+}
+
+
+// --- 3. START POINT ---
 window.addEventListener('load', () => {
   document.body.style.overflow = 'hidden';
   introScreenOverlay.style.display = 'flex'; 
-  showNextText();
+  startTypingAnimation();
 });
-
 /* --- AKHIR COPY PASTE SELURUHNYA KE FILE animasi.js --- */
