@@ -9,49 +9,38 @@ for (let i = 0; i < 30; i++) {
   bg.appendChild(heart);
 }
 
-// urutan section
+const intro = document.getElementById('intro');
+const mainPage = document.querySelector('main');
 const sections = document.querySelectorAll('main > *');
-const main = document.querySelector('main');
-
-window.onload = () => {
-  // delay intro
-  setTimeout(() => {
-    document.getElementById('intro').style.display = 'none';
-    main.classList.remove('hidden');
-
-    // sembunyiin semua section dulu
-    sections.forEach(s => {
-      s.classList.add('reveal-section');
-    });
-
-    let i = 0;
-    const showNext = () => {
-      if (i < sections.length) {
-        sections[i].classList.add('show');
-        i++;
-        setTimeout(showNext, 1800);
-      } else {
-        // setelah semua muncul, enable scroll
-        document.body.style.overflowY = 'auto';
-      }
-    };
-
-    // disable scroll dulu waktu intro
-    document.body.style.overflow = 'hidden';
-    showNext();
-  }, 3000);
-};
-// animasi.js
 
 window.addEventListener('load', () => {
-  const intro = document.getElementById('intro');
-  const mainPage = document.querySelector('main');
+  // disable scroll pas intro
+  document.body.style.overflow = 'hidden';
 
+  // fade out intro
   setTimeout(() => {
     intro.classList.add('fade-out');
     setTimeout(() => {
       intro.style.display = 'none';
       mainPage.classList.remove('hidden');
-    }, 500);
+
+      // sembunyiin semua section dulu
+      sections.forEach(s => s.classList.add('reveal-section'));
+
+      // animasi muncul satu per satu
+      let i = 0;
+      const showNext = () => {
+        if (i < sections.length) {
+          sections[i].classList.add('show');
+          i++;
+          setTimeout(showNext, 1800);
+        } else {
+          // enable scroll abis semua muncul
+          document.body.style.overflowY = 'auto';
+        }
+      };
+      showNext();
+
+    }, 600);
   }, 2500);
 });
