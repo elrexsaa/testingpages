@@ -3,8 +3,7 @@
 // --- INISIASI & SETUP ---
 const bg = document.querySelector('.bg-hearts');
 
-// FIX: Memastikan kita memilih kontainer overlay utama
-// .intro-screen adalah CLASS dari div yang menutupi halaman
+// FIX: Menggunakan querySelector untuk class .intro-screen
 const introScreenOverlay = document.querySelector('.intro-screen'); 
 const mainPage = document.querySelector('main');
 const sections = document.querySelectorAll('main > *');
@@ -22,7 +21,6 @@ const TEXT_FADE_DURATION = 800;    // Waktu fade in/out (0.8 detik)
 
 
 // --- 1. SETUP HEARTS (kode love random) ---
-// Kode ini memastikan background hearts tetap berjalan di latar belakang
 for (let i = 0; i < 30; i++) {
   const heart = document.createElement('span');
   heart.innerHTML = '❤';
@@ -39,22 +37,23 @@ function showNextText() {
     
     // --- AKHIR ANIMASI: SEMBUNYIKAN INTRO SCREEN ---
     setTimeout(() => {
-      // 1. Mulai FADE OUT overlay utama
+      // 1. Mulai FADE OUT overlay utama (transisi 0.5s)
       introScreenOverlay.classList.add('fade-out'); 
       
-      // 2. Tunggu transisi fade out selesai (0.5s dari style.css)
+      // 2. Tunggu transisi fade out selesai
       setTimeout(() => {
-        introScreenOverlay.style.display = 'none'; // Sembunyikan kontainer overlay
+        // FIX: Sembunyikan total agar konten terlihat
+        introScreenOverlay.style.display = 'none'; 
         
-        // 3. Tampilkan main content
-        // mainPage awalnya punya class "hidden", ini akan menghapusnya
+        // 3. Tampilkan main content (hapus class hidden)
         mainPage.classList.remove('hidden'); 
         
         document.body.style.overflowY = 'auto'; // Aktifkan scroll
         
-        // 4. Mulai animasi reveal sections (memunculkan objek di kenangan.html)
+        // 4. Mulai animasi reveal sections
         revealSections();
-      }, 500); 
+      }, 500); // 500ms adalah durasi transisi opacity di style.css
+      
     }, TEXT_DISPLAY_DURATION + TEXT_FADE_DURATION); // Jeda total sebelum intro menghilang
 
     return;
@@ -68,15 +67,15 @@ function showNextText() {
 
   // Jadwalkan FADE OUT setelah waktu tampil
   setTimeout(() => {
-    introTextElement.classList.remove('is-visible'); // Teks mulai hilang
+    introTextElement.classList.remove('is-visible'); 
 
     // Tunggu FADE OUT selesai, baru panggil teks berikutnya
     setTimeout(() => {
       textIndex++;
       showNextText();
-    }, TEXT_FADE_DURATION); // Durasi tunggu FADE OUT
+    }, TEXT_FADE_DURATION); 
     
-  }, TEXT_DISPLAY_DURATION); // Durasi tampil teks
+  }, TEXT_DISPLAY_DURATION); 
 }
 
 // --- 3. LOGIKA REVEAL SECTION ---
