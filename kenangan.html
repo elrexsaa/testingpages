@@ -10,24 +10,21 @@
   <meta property="og:image" content="img/logo.jpg" /> 
   <meta property="og:url" content="https://elrexsaa.github.io/testingpages/kenangan.html" /> 
   <meta property="og:type" content="website" />
-  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  
   <div class="intro-screen">
-    <div id="intro-text" class="intro-text"></div>
+    <div id="intro-text-typing" class="intro-text"></div>
   </div>
 
-  <div class="bg-hearts"></div>
+  <div class="bg-hearts"></div> 
 
   <main class="page--stack hidden">
-    
-    <header class="main-header">
-      <h2 id="greeting" class="typewriter">Hi, My Beloved Nikita Friskila Pakpahan💗💗💗</h2>
+    <header class="mem-header reveal-section">
+      <h2 id="greeting">Hi, My Beloved Nikita Friskila Pakpahan💗💗💗</h2> 
       <p class="muted">pilih salah satu album kenangan kita di bawah ini ya!</p>
       <button id="btnLogout" onclick="doLogout()">Logout</button>
     </header>
@@ -61,6 +58,7 @@
       <p>dengarkan 3 lagu ini, lagu-lagu yang mengingatkanku pada kamu, dari masa awal kita sampai sekarang.</p>
       
       <div class="track-list">
+        
         <div class="music-card">
           <img class="track-cover" src="img/cover1.jpg" alt="Cover Album All Of Me">
           <div class="track-info">
@@ -69,6 +67,7 @@
             <audio controls src="sound/sound1.mp3"></audio>
           </div>
         </div>
+
         <div class="music-card">
           <img class="track-cover" src="img/cover2.JPG" alt="Cover Album Nina">
           <div class="track-info">
@@ -77,6 +76,7 @@
             <audio controls src="sound/sound2.mp3"></audio>
           </div>
         </div>
+
         <div class="music-card">
           <img class="track-cover" src="img/cover3.jpg" alt="Cover Album Kenangan Terindah">
           <div class="track-info">
@@ -86,7 +86,7 @@
           </div>
         </div>
       </div>
-    </div>
+      </div>
 
     <div id="sectionPhotos" class="content-section reveal-section">
       <h3>📸 Foto-foto Kita</h3>
@@ -100,8 +100,9 @@
           <div class="carousel-slide"><img src="img/f1.jpg" alt="Foto Kenangan 4"></div>
           <div class="carousel-slide"><img src="img/f6.jpg" alt="Foto Kenangan 5"></div>
           <div class="carousel-slide"><img src="img/f2.jpg" alt="Foto Kenangan 6"></div>
-        </div>
+          </div>
       </div>
+      
     </div>
 
     <div id="sectionChat" class="content-section reveal-section">
@@ -121,6 +122,7 @@
       <p>beberapa kutipan yang selalu kuingat, yang membuatku semakin mencintaimu:</p>
       
       <div class="fav-chat-container">
+        
         <div class="fav-chat-bubble right">
           <div class="text">km kann jagoan nya aku.</div>
           <div class="meta">
@@ -128,6 +130,7 @@
             <span class="favorite-star">⭐</span>
           </div>
         </div>
+        
         <div class="fav-chat-bubble right">
           <div class="text">yasudaa intinyaa km bisaa, AKUUU YAKINN SAYANGGKU...</div>
           <div class="meta">
@@ -135,13 +138,13 @@
             <span class="favorite-star">⭐</span>
           </div>
         </div>
+        
       </div>
-    </div>
-    
+      </div>
+      
     <footer class="footer">
         <p>Created with <span style="color:var(--accent);">❤</span> by your Sayang.</p>
     </footer>
-
   </main>
 
   <audio id="bgm" src="audio.mp3" autoplay loop></audio>
@@ -153,7 +156,6 @@
     const AUTH_KEY = 'kenangan_verified';
     const LOGIN_PAGE = 'index.html';
     
-    // Periksa otorisasi
     if (localStorage.getItem(AUTH_KEY) !== 'true') {
       window.location.replace(LOGIN_PAGE);
     }
