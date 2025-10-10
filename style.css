@@ -1,3 +1,4 @@
+/* --- MULAI COPY PASTE SELURUHNYA KE FILE style.css --- */
 :root {
   --bg1: #fde4e8;
   --bg2: #ffe0f0;
@@ -31,14 +32,17 @@ body{
 .intro-screen {
   position: fixed;
   inset: 0;
-  background: #f8f8f8;
+  /* background: #f8f8f8; Ganti dengan background gradient agar konsisten */
+  background: linear-gradient(135deg, var(--bg1), var(--bg2));
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Dancing Script', cursive;
   font-size: 2rem;
   z-index: 9999;
+  /* Biarkan transisi untuk fade-out final dari JS */
   transition: opacity 0.5s ease;
+  /* PERBAIKAN: Hapus animation: introFade 1.5s ease forwards; yang mengganggu JS */
 }
 
 .intro-screen.fade-out {
@@ -176,7 +180,7 @@ body{
 .intro-screen {
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, #fde4e8, #ffe0f0);
+  background: linear-gradient(135deg, var(--bg1), var(--bg2));
   display: flex;
   justify-content: center;
   align-items: center;
@@ -203,11 +207,14 @@ body{
     opacity: 1;
 }
 
+/* PERBAIKAN: Hapus keyframes introFade karena mengganggu transisi fade-out final dari JS */
+/*
 @keyframes introFade {
   0% { opacity: 1; }
   85% { opacity: 1; }
   100% { opacity: 0; visibility: hidden; }
 }
+*/
 
 /* bg love */
 .bg-hearts {
@@ -241,3 +248,4 @@ body{
   opacity: 1;
   transform: translateY(0);
 }
+/* --- AKHIR COPY PASTE SELURUHNYA KE FILE style.css --- */
