@@ -60,9 +60,9 @@ function showNextText() {
     introEl.classList.remove('fade-in');
     index++;
     if (index < texts.length) {
-      setTimeout(showNextText, 1000);
+      setTimeout(showNextText, 500); // jeda antar teks
     }
-  }, 2500);
+  }, 3000); // lama teks tampil (3 detik)
 }
 
 showNextText();
