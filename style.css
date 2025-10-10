@@ -39,7 +39,6 @@ body{
   font-family: 'Dancing Script', cursive;
   font-size: 2rem;
   z-index: 9999;
-  /* Transisi final fade-out (0.5s) */
   transition: opacity 0.5s ease;
 }
 
@@ -113,15 +112,57 @@ body{
 }
 .content-section p{font-size:1rem;line-height:1.6;color:#4a4a4a;margin-bottom:16px}
 
-.gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(100px,1fr));
-  gap:8px;
+/* --- GAYA CAROUSEL FOTO BARU --- */
+.carousel-container {
+    overflow: hidden; 
+    padding: 0 10%; /* Biarkan ruang di samping untuk efek blur */
+    margin: 20px 0;
 }
-.gallery img{
-  width:100%;height:100px;object-fit:cover;
-  border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);
+
+.carousel-track {
+    display: flex;
+    overflow-x: scroll; /* Mengizinkan geser horizontal */
+    scroll-snap-type: x mandatory; /* Memaksa snap ke slide */
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    gap: 16px; /* Jarak antar foto */
+    /* Sembunyikan scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-slide {
+    flex: 0 0 80%; /* Setiap slide mengambil 80% lebar container */
+    max-width: 80%;
+    aspect-ratio: 1 / 1; /* Rasio 1:1 */
+    scroll-snap-align: center; /* Snap foto ke tengah */
+    transition: all 0.4s ease-in-out;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    
+    /* EFEK BLUR DAN FADE OUT default (saat tidak aktif) */
+    filter: blur(5px) brightness(0.7);
+    transform: scale(0.95);
+    transition: all 0.4s ease-in-out;
+}
+
+/* EFEK FOKUS (Saat slide berada di tengah) */
+.carousel-slide.active img {
+    filter: blur(0) brightness(1); /* Sharp focus */
+    transform: scale(1); /* Full size */
+    box-shadow: 0 8px 30px rgba(255,105,180,0.4); /* Bayangan lebih kuat */
+}
+/* --- AKHIR GAYA CAROUSEL FOTO BARU --- */
+
 
 .track{
   background:var(--glass-card);
@@ -186,7 +227,6 @@ body{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* Transisi fade in/out teks (0.8s) */
   transition: opacity 0.8s ease-in-out; 
 }
 
@@ -199,7 +239,6 @@ body{
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   overflow: hidden;
-  /* z-index -1 agar di belakang semua konten */
   z-index: -1;
 }
 .bg-hearts span {
@@ -228,4 +267,3 @@ body{
   transform: translateY(0);
 }
 /* --- AKHIR COPY PASTE SELURUHNYA KE FILE style.css --- */
-
