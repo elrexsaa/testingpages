@@ -35,7 +35,8 @@
             <div class="input-wrapper">
                 <label for="pw" class="visually-hidden">Masukkan Password</label>
                 <input id="pw" class="input" type="password" placeholder="password" autocomplete="off" aria-label="kata sandi">
-                <span id="togglePw" aria-label="tampilkan password">👁️</span> </div>
+                <span id="togglePw" aria-label="tampilkan password">👁️</span> 
+            </div>
 
             <button id="btnEnter" class="btn btn--primary" aria-describedby="hint">verifikasi</button>
             
@@ -52,13 +53,13 @@
     </main>
 
     <script>
-        /* SCRIPT DARI script.js - Logika Verifikasi Halaman Login */
+        /* SCRIPT LOGIKA LOGIN */
 
         /* ===== easy settings (ubah di sini) ===== */
-        const PASSWORD_TO_CHANGE = 'nikitaelga2024'; // Ubah password sesuai keinginanmu
+        const PASSWORD_TO_CHANGE = 'nikitaelga2024'; 
         const AUTHOR_HANDLE = '@elgarexsaa';
-        const TARGET_PAGE = 'kenangan.html'; // Target halaman setelah login
-        const AUTH_KEY = 'kenangan_verified'; // Kunci rahasia untuk localStorage
+        const TARGET_PAGE = 'kenangan.html'; 
+        const AUTH_KEY = 'kenangan_verified'; 
         
         // elements
         const pw = document.getElementById('pw');
@@ -69,7 +70,8 @@
         const loginPage = document.getElementById('loginPage');
         const loadingPage = document.getElementById('loadingPage');
         const typingText = document.getElementById('typingText');
-        const togglePw = document.getElementById('togglePw'); // ICON MATA BARU
+        const togglePw = document.getElementById('togglePw');
+        const loginCard = document.querySelector('.login-card'); // Elemen card login
         
         // event listeners
         pw.addEventListener('keydown', (e) => { 
@@ -84,7 +86,7 @@
         togglePw.addEventListener('click', () => {
             const type = pw.getAttribute('type') === 'password' ? 'text' : 'password';
             pw.setAttribute('type', type);
-            togglePw.textContent = type === 'password' ? '👁️' : '🔒'; // Ganti ikon
+            togglePw.textContent = type === 'password' ? '👁️' : '🔒'; 
             togglePw.setAttribute('aria-label', type === 'password' ? 'tampilkan password' : 'sembunyikan password');
         });
 
@@ -105,10 +107,13 @@
 
         function attemptEnter(){
             const v = (pw.value || '').trim();
+            
+            // Hapus efek getar jika ada dari percobaan sebelumnya
+            loginCard.classList.remove('shake-effect');
+
             if (v === PASSWORD_TO_CHANGE){
                 showVerify(true, 'verifikasi berhasil, sedang masuk ke halaman...');
                 
-                // === SET AUTH TOKEN DI LOCALSTORAGE ===
                 localStorage.setItem(AUTH_KEY, 'true'); 
                 
                 loginPage.hidden = true;
@@ -116,6 +121,14 @@
                 setTimeout(startTypingSequence, 500); 
             } else {
                 showVerify(false, `verifikasi gagal. hubungi author: ${AUTHOR_HANDLE}`);
+                
+                // === TAMBAHAN LOGIKA GETAR ===
+                loginCard.classList.add('shake-effect');
+                // Hapus kelas setelah animasi selesai (500ms, harus cocok dengan durasi CSS @keyframes shake)
+                setTimeout(() => {
+                    loginCard.classList.remove('shake-effect');
+                }, 500);
+                // === AKHIR TAMBAHAN LOGIKA GETAR ===
             }
         }
 
@@ -144,7 +157,6 @@
              loadingPage.hidden = true;
              loadingPage.setAttribute('aria-hidden', 'true');
 
-             // PERBAIKAN: CEK APAKAH SUDAH TERVERIFIKASI
              if (localStorage.getItem(AUTH_KEY) === 'true') {
                  console.log("Token ditemukan, langsung menuju halaman kenangan.");
                  window.location.href = TARGET_PAGE;
