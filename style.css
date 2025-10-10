@@ -181,25 +181,41 @@ body{
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  animation: introFade 1s ease forwards;
+  animation: introFade 1.5s ease forwards;
 }
 
 .intro-text {
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 2.8rem;
+  font-family: 'Dancing Script', cursive;
   color: var(--accent);
+  text-align: center;
+  letter-spacing: 1px;
   opacity: 0;
-  animation: introText 2.5s ease forwards;
+  animation: introText 3s ease-in-out forwards;
 }
 
 @keyframes introText {
-  0% { opacity: 0; transform: translateY(20px); }
-  50% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
 }
+
 @keyframes introFade {
   0% { opacity: 1; }
-  90% { opacity: 1; }
+  85% { opacity: 1; }
   100% { opacity: 0; visibility: hidden; }
 }
 
