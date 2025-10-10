@@ -21,12 +21,13 @@ function updateCountdown() {
 const countdownInterval = setInterval(updateCountdown, 1000);
 updateCountdown();
 
-// ===== SCROLL =====
+// ===== SCROLL (Disesuaikan untuk Sticky Header setelah menghapus margin negatif) =====
 function scrollToTarget(button){
   const targetId = button.getAttribute('data-target');
   const targetElement = document.querySelector(targetId);
   if(targetElement){
     const headerHeight = document.querySelector('.mem-header').offsetHeight;
+    // Scroll 10px DI ATAS elemen target, setelah dikurangi tinggi sticky header
     const offset = targetElement.offsetTop - headerHeight - 10; 
     window.scrollTo({top:offset,behavior:'smooth'});
   }
