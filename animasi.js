@@ -32,7 +32,7 @@ const SECTION_DELAY = 800;
 // --- FUNGSI BARU: PELACAKAN PENGGUNA (FRONTEND) ---
 function trackEntrance() {
     // ⚠️ PENTING: GANTI URL INI DENGAN WEB APP URL DARI GOOGLE APPS SCRIPT ANDA!
-    const TRACKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx3Zab0QdryVJIZ8aISn2Y_6MDSqY-TJh4SVl9vrojdmVDpI5MHpW-iUpVpXnuy8Uai-g/exec'; // <--- GANTI DI SINI!!!
+    const TRACKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbw4hRv9sfZVWJKGwURmgAIesQhxW3xQ7-DEXF4RaL3wbQs5x2r2mJ2nO2GQWFc3Kvpgzg/exec'; // <--- GANTI DI SINI!!!
     
     const userData = {
         // Data perangkat
