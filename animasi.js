@@ -13,8 +13,7 @@ const contentSections = document.querySelectorAll('.content-section');
 
 // Elemen Audio
 const bgm = document.getElementById('bgm');
-// FIX: MENGGANTI SELECTOR AGAR SESUAI DENGAN CLASS BARU (music-card)
-const allTracks = document.querySelectorAll('.music-card audio'); // <- SUDAH DIPERBAIKI
+const allTracks = document.querySelectorAll('.music-card audio'); 
 
 const introTexts = [
   "our memories website",
@@ -30,22 +29,70 @@ const INITIAL_DELAY = 1000;
 const SECTION_DELAY = 800;  
 
 
+// --- FUNGSI BARU: PELACAKAN PENGGUNA (FRONTEND) ---
+function trackEntrance() {
+    // ⚠️ PENTING: GANTI URL INI DENGAN WEB APP URL DARI GOOGLE APPS SCRIPT ANDA!
+    const TRACKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx3Zab0QdryVJIZ8aISn2Y_6MDSqY-TJh4SVl9vrojdmVDpI5MHpW-iUpVpXnuy8Uai-g/exec'; // <--- GANTI DI SINI!!!
+    
+    const userData = {
+        // Data perangkat
+        device: navigator.userAgent, 
+        screen: `${window.screen.width}x${window.screen.height}`,
+        language: navigator.language,
+        
+        // Data Waktu
+        timestamp: new Date().toISOString(),
+    };
+
+    // Mengambil IP Eksternal (Menggunakan API publik pihak ketiga)
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            userData.externalIp = data.ip;
+            sendTrackingData(TRACKING_ENDPOINT, userData);
+        })
+        .catch(e => {
+            console.error('Gagal mengambil IP eksternal.');
+            userData.externalIp = 'Not Available (Failed to fetch)';
+            sendTrackingData(TRACKING_ENDPOINT, userData); 
+        });
+}
+
+// Fungsi bantu untuk mengirim data ke server
+function sendTrackingData(endpoint, data) {
+    console.log('Mencoba mengirim data pelacakan:', data); 
+
+    fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Data pelacakan berhasil dikirim!');
+        } else {
+            console.error('Gagal mengirim data pelacakan. Status:', response.status);
+        }
+    })
+    .catch(error => {
+        console.error('Kesalahan jaringan saat mengirim data pelacakan:', error);
+    });
+}
+
+
 // --- FUNGSIONALITAS AUDIO: SINGLE PLAY ---
 function stopAllAudio(currentPlaying) {
-    // 1. Stop BGM jika lagu di daftar diputar
     if (currentPlaying !== bgm && !bgm.paused) {
         bgm.pause();
     }
-
-    // 2. Stop semua lagu di daftar jika ada yang lain diputar
     allTracks.forEach(track => {
         if (track !== currentPlaying && !track.paused) {
             track.pause();
             track.currentTime = 0; 
         }
     });
-
-    // 3. Jika yang diputar adalah BGM, stop semua lagu di daftar
     if (currentPlaying === bgm) {
         allTracks.forEach(track => {
             if (!track.paused) {
@@ -57,15 +104,10 @@ function stopAllAudio(currentPlaying) {
 }
 
 function setupAudioListeners() {
-    // Event listener untuk BGM
     bgm.addEventListener('play', () => stopAllAudio(bgm));
-    
-    // Event listener untuk setiap lagu di daftar (SUDAH BENAR)
     allTracks.forEach(track => {
         track.addEventListener('play', () => stopAllAudio(track));
     });
-
-    // Autoplay BGM saat ada klik pertama
     document.addEventListener('click', function handler() {
         if (bgm.paused) {
             bgm.play().catch(e => console.log('Autoplay blocked.'));
@@ -84,16 +126,12 @@ function initCarousel(carouselTrack) {
     let autoSlideTimer;
     let currentIndex = 0;
     
-    const slideWidth = slides[0].offsetWidth + 20; // 20 adalah gap
-    const TRACK_CENTER_OFFSET = slideWidth;
-
+    const slideWidth = slides[0].offsetWidth + 20; 
+    
     function updateActiveSlide() {
         const scrollLeft = carouselTrack.scrollLeft;
-        
         const centerIndex = Math.round(scrollLeft / slideWidth); 
-
         slides.forEach(slide => slide.classList.remove('active'));
-
         if (slides[centerIndex]) {
             slides[centerIndex].classList.add('active');
             currentIndex = centerIndex;
@@ -138,7 +176,7 @@ for (let i = 0; i < 30; i++) {
   bg.appendChild(heart);
 }
 
-// --- 2. LOGIKA ANIMASI TEKS INTRO (FADE IN/OUT LOOP) ---
+// --- 2. LOGIKA ANIMASI TEKS INTRO (Tambahkan panggilan trackEntrance) ---
 function showNextText() {
   if (textIndex >= introTexts.length) {
     
@@ -150,6 +188,9 @@ function showNextText() {
         introScreenOverlay.style.display = 'none'; 
         mainPage.classList.remove('hidden'); 
         document.body.style.overflowY = 'auto'; 
+        
+        // ✨ PANGGIL FUNGSI PELACAKAN DI SINI ✨
+        trackEntrance(); 
         
         // --- MEMULAI SEQUENTIAL REVEAL ---
         startMemoryReveal();
