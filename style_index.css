@@ -1,0 +1,251 @@
+/* --- MULAI COPY PASTE SELURUHNYA KE FILE style_index.css --- */
+:root {
+    --bg1: #fde4e8; /* Background Lebih Pucat */
+    --bg2: #ffe0f0;
+    --accent: #ff6fb5; /* Pink Utama */
+    --glass-card: rgba(255, 255, 255, 0.95); /* Lebih Solid */
+    --muted: #806b72;
+    --shadow: 0 16px 40px rgba(15, 10, 20, 0.15);
+    --input-focus: #ffc2e4;
+    --text-color: #2f1e2b;
+    --font-main: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+    font-family: var(--font-main);
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    position: relative; 
+}
+
+/* Container Halaman */
+.page--center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px; 
+    z-index: 20; 
+}
+
+/* Card Login */
+.card {
+    background: var(--glass-card);
+    border-radius: 2.5rem; 
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+    width: 100%;
+    transform: translateY(0);
+    transition: transform 0.4s ease-out;
+}
+
+/* --- ANIMASI GETAR (SHAKE) --- */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+}
+
+.shake-effect {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0); 
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+/* --- AKHIR ANIMASI GETAR --- */
+
+/* Icon Chibi */
+.chibi-icon {
+    font-size: 5rem; 
+    margin-bottom: 1.5rem;
+    line-height: 1;
+}
+
+/* Judul */
+#loginTitle {
+    font-size: 2rem; 
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+}
+
+/* Teks Muted */
+.muted {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+}
+
+/* INPUT DAN ICON MATA */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    padding-right: 3.5rem; 
+    border-radius: 1.5rem; 
+    border: 2px solid #ddd;
+    font-size: 1.1rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 5px rgba(255, 111, 181, 0.2);
+}
+
+#togglePw {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+}
+
+#togglePw:hover {
+    color: var(--accent);
+}
+
+
+/* Button */
+.btn {
+    display: inline-block;
+    padding: 1rem 1.5rem;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    border: none;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    letter-spacing: 0.5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+.btn--primary {
+    background: linear-gradient(90deg, var(--accent), #ff8cc7);
+    color: #fff;
+    box-shadow: 0 12px 30px rgba(255, 105, 180, 0.35);
+}
+
+.btn--primary:hover {
+    transform: translateY(-2px); 
+    box-shadow: 0 16px 35px rgba(255, 105, 180, 0.5); 
+}
+
+.btn--primary:active {
+    transform: translateY(1px) scale(0.98); 
+    box-shadow: 0 8px 20px rgba(255, 105, 180, 0.2);
+}
+
+/* --- PERBAIKAN POSISI POP-UP ERROR (DI TENGAH) --- */
+.verify-frame {
+    position: fixed; /* Ubah ke fixed agar di tengah layar */
+    left: 50%;
+    top: 50%; /* Posisikan di tengah vertikal */
+    transform: translate(-50%, -50%); /* Centering sempurna */
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 15px 25px; 
+    border-radius: 18px;
+    font-size: 1rem; 
+    font-weight: 600;
+    color: white;
+    z-index: 30; 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    min-width: 280px;
+}
+.verify-frame[hidden] {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -60%); /* Transisi dari atas saat hilang */
+}
+.verify-frame:not([hidden]) {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+/* --- AKHIR PERBAIKAN POSISI POP-UP ERROR --- */
+
+.verify-frame.ok { background: #4CAF50; } 
+.verify-frame.fail { background: #F44336; } 
+.verify-icon { font-size: 1.2rem; }
+
+/* Footer Hint */
+.hint-text {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 2rem;
+}
+.hint-text a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* Loading Page */
+#loadingPage {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+#loadingPage[aria-hidden="false"] {
+    opacity: 1;
+    z-index: 999; 
+    pointer-events: auto; 
+}
+#loadingPage[aria-hidden="true"] {
+    z-index: -1; 
+    pointer-events: none; 
+}
+
+#typingText {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-top: 20px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+/* --- AKHIR COPY PASTE SELURUHNYA KE FILE style_index.css --- */

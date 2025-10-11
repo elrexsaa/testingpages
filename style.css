@@ -1,0 +1,363 @@
+/* --- MULAI COPY PASTE SELURUHNYA KE FILE style.css --- */
+:root {
+  --bg1: #fde4e8;
+  --bg2: #ffe0f0;
+  --accent: #ff6fb5;
+  --glass-card: rgba(255, 255, 255, 0.9);
+  --muted: #806b72;
+  --shadow: 0 16px 40px rgba(15, 10, 20, 0.15);
+  --text-color: #2f1e2b;
+  --font-main: 'Inter', sans-serif;
+  --font-script: 'Dancing Script', cursive;
+  --header-bg: rgba(255, 255, 255, 0.7);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-main);
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:var(--text-color);
+  min-height:100vh;
+  overflow-x:auto;
+}
+
+.page--stack{max-width:768px;margin:0 auto;padding:20px 16px 80px}
+
+.mem-header{
+  position:sticky;top:0;
+  padding:12px 0; 
+  margin-bottom:24px;
+  background:var(--header-bg);backdrop-filter:blur(5px);z-index:50;
+}
+
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, var(--bg1), var(--bg2));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.intro-screen.fade-out {
+  opacity: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+/* --- PERBAIKAN HEADER ESTETIK MOBILE --- */
+.mem-header h2{
+  font-family:var(--font-script);
+  font-size:2.2rem; 
+  color:var(--accent);
+  line-height:1.2;
+  margin-bottom:4px;
+}
+/* Penyesuaian untuk layar sangat kecil */
+@media (max-width: 380px) {
+  .mem-header h2 {
+    font-size: 1.8rem;
+  }
+}
+/* Penyesuaian untuk layar desktop/tablet yang lebih besar */
+@media (min-width: 640px) {
+  .mem-header h2 {
+    font-size: 2.8rem;
+  }
+}
+/* --- AKHIR PERBAIKAN HEADER --- */
+
+#btnLogout{
+  position:absolute;top:20px;right:16px;
+  background:rgba(255,255,255,0.6);
+  border:1px solid rgba(0,0,0,0.1);
+  padding:8px 12px;border-radius:12px;font-size:.8rem;
+  cursor:pointer;transition:background .2s;
+}
+#btnLogout:hover{background:#fee}
+
+.countdown-container{
+  text-align:center;
+  background:var(--glass-card);
+  padding:15px;border-radius:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+  margin-bottom:30px;
+}
+.countdown-title{font-size:.9rem;font-weight:700;color:var(--accent);margin-bottom:5px}
+#countdown{font-size:1.6rem;font-weight:800;color:var(--text-color)}
+
+.menu-grid{display:grid;gap:16px;margin-bottom:40px}
+@media(min-width:640px){.menu-grid{grid-template-columns:1fr 1fr}}
+
+.card{
+  background:var(--glass-card);
+  border-radius:24px;
+  padding:24px;
+  box-shadow:var(--shadow);
+  transition:.3s ease;
+  cursor:pointer;
+}
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 45px rgba(255,105,180,0.25);
+}
+
+.card-title{font-size:1.25rem;font-weight:800;margin-bottom:4px}
+.card-sub{font-size:.85rem;color:var(--muted)}
+
+.content-section{
+  padding-top:50px;
+  margin-top:-50px;
+  margin-bottom:40px;
+}
+.content-section h3{
+  font-size:1.8rem;
+  font-weight:800;
+  color:var(--accent);
+  margin-bottom:20px;
+  border-bottom:3px solid var(--accent);
+  padding-bottom:8px;
+  display:inline-block;
+}
+.content-section p{font-size:1rem;line-height:1.6;color:#4a4a4a;margin-bottom:16px}
+
+/* --- GAYA SPOTIFY MUSIC CARD --- */
+.music-card {
+    display: flex; 
+    align-items: center;
+    background: var(--glass-card);
+    padding: 15px;
+    border-radius: 18px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.track-cover {
+    width: 60px; 
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.track-info {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
+.tmeta {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.tsub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.music-card audio {
+    width: 100%;
+    height: 30px; 
+    filter: sepia(100%) saturate(200%) hue-rotate(290deg) brightness(80%) contrast(100%); 
+}
+
+/* --- GAYA CHAT FAVORIT BARU (WHATSAPP STAR) --- */
+.fav-chat-container {
+    padding: 10px 0;
+}
+
+.fav-chat-bubble {
+    display: inline-block;
+    max-width: 85%;
+    margin-bottom: 15px;
+    margin-left: auto; /* Memastikan bubble di kanan */
+}
+
+.fav-chat-bubble.right {
+    background: var(--accent); /* Warna pink sesuai tema */
+    color: white;
+    padding: 8px 12px 4px 12px; 
+    border-radius: 12px 12px 4px 12px; /* Gaya bubble chat kanan */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    line-height: 1.4;
+    position: relative;
+    float: right; /* Memastikan bubble ada di kanan */
+    clear: both; /* Agar bubble berikutnya berada di bawahnya */
+}
+
+.fav-chat-bubble .text {
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.fav-chat-bubble .meta {
+    display: flex;
+    justify-content: flex-end; /* Time dan Star di kanan */
+    align-items: center;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7); /* Warna abu-abu muda */
+}
+
+.favorite-star {
+    margin-left: 5px;
+    font-size: 0.8rem; /* Ukuran bintang lebih kecil */
+}
+/* --- AKHIR GAYA CHAT FAVORIT BARU --- */
+
+
+/* --- GAYA CAROUSEL FOTO BARU & ESTETIK --- */
+.carousel-container {
+    overflow: hidden; 
+    margin: 20px 0;
+}
+
+.carousel-track {
+    display: flex;
+    overflow-x: scroll; 
+    scroll-snap-type: x mandatory; 
+    scroll-behavior: smooth;
+    gap: 20px; 
+    padding: 0 12.5%; 
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-slide {
+    flex: 0 0 75%; 
+    max-width: 75%;
+    aspect-ratio: 1 / 1; 
+    scroll-snap-align: center; 
+    transition: all 0.4s ease-in-out;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    
+    filter: blur(8px) brightness(0.6);
+    transform: scale(0.9); 
+    transition: all 0.4s ease-in-out;
+}
+
+.carousel-slide.active img {
+    filter: blur(0) brightness(1); 
+    transform: scale(1); 
+    box-shadow: 0 8px 30px rgba(255,105,181,0.6); 
+}
+/* --- AKHIR GAYA CAROUSEL FOTO BARU & ESTETIK --- */
+
+
+.chat-frame{
+  background:#f4f4f4;
+  border-radius:20px;
+  padding:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  max-height:400px;
+  overflow-y:auto;
+}
+.chat-header{
+  padding:10px 0;margin-bottom:10px;
+  border-bottom:1px solid #ddd;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.contact{font-weight:700;color:#2f1e2b}
+.bubble{margin-bottom:10px;display:flex;flex-direction:column;max-width:85%}
+.bubble.left{align-items:flex-start}
+.bubble.right{align-items:flex-end;margin-left:auto}
+.bubble .txt{
+  background:#fff;padding:10px 15px;border-radius:18px 18px 18px 4px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.05);line-height:1.4;
+}
+.bubble.right .txt{
+  background:var(--accent);color:white;border-radius:18px 18px 4px 18px;
+}
+.bubble .ts{font-size:.75rem;color:var(--muted);margin-top:4px}
+
+/* Style untuk Quotes/Quotes yang lama (dihilangkan karena diganti dengan fav-chat-bubble) */
+/* .content-section #sectionQuotes .track { display: none; } */
+
+
+/* animasi */
+.fade-in{opacity:0;animation:fadeIn .8s ease forwards}
+.fade-up{opacity:0;transform:translateY(20px);animation:fadeUp 1s ease forwards}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* efek teks ketik */
+.typewriter{
+  overflow:auto;
+  border-right:2px solid var(--accent);
+  white-space:nowrap;
+  animation:typing 4s steps(40,end), blink .8s infinite;
+}
+@keyframes typing{from{width:0}to{width:100%}}
+@keyframes blink{50%{border-color:transparent}}
+
+/* intro */
+.intro-text {
+  font-size: 2.8rem;
+  font-family: 'Dancing Script', cursive;
+  color: var(--accent);
+  text-align: center;
+  letter-spacing: 1px;
+  opacity: 0; 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.8s ease-in-out; 
+}
+
+.intro-text.is-visible {
+    opacity: 1;
+}
+
+/* bg love */
+.bg-hearts {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+.bg-hearts span {
+  position: absolute;
+  color: rgba(255, 111, 181, 0.5);
+  font-size: 20px;
+  animation: floatUp linear infinite;
+  filter: blur(2px);
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+}
+
+/* animasi reveal tiap section */
+.hidden { display: none; }
+
+.reveal-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1.3s ease;
+}
+.reveal-section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* --- AKHIR COPY PASTE SELURUHNYA KE FILE style.css --- */

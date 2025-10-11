@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Memories Site</title>
+
+    <meta property="og:title" content="Our Memories Website💗" />
+    <meta property="og:description" content="For Sayangku Cintaku Cantikku Cianku Tondiku😋❤️" />
+    <meta property="og:image" content="img/logo.ico" /> 
+    <meta property="og:url" content="https://elrexsaa.github.io/testingpages/index.html" /> 
+    <meta property="og:type" content="website" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style_index.css">
+</head>
+<body>
+
+    <div id="loadingPage" aria-hidden="true">
+        <div class="chibi-icon" style="opacity: 0.8;">⏳</div>
+        <div id="typingText"></div>
+    </div>
+
+    <main id="loginPage" class="page--center">
+        <div class="card login-card" role="dialog" aria-labelledby="loginTitle">
+
+            <div class="chibi-icon" aria-hidden="true">
+                🎞️
+            </div>
+
+            <h1 id="loginTitle">All Memories</h1>
+            <p class="muted">halaman ini berisi kenangan pribadi. masukkan kata sandi untuk melanjutkan.</p>
+
+            <div class="input-wrapper">
+                <label for="pw" class="visually-hidden">Masukkan Password</label>
+                <input id="pw" class="input" type="password" placeholder="password" autocomplete="off" aria-label="kata sandi">
+                <span id="togglePw" aria-label="tampilkan password">👁️</span> 
+            </div>
+
+            <button id="btnEnter" class="btn btn--primary" aria-describedby="hint">verifikasi</button>
+            
+            <div id="verifyFrame" class="verify-frame" role="status" aria-live="polite" hidden>
+                <div id="verifyIcon" class="verify-icon" aria-hidden="true"></div>
+                <div id="verifyText" class="verify-text"></div>
+            </div>
+
+            <p class="hint-text" id="hint">
+                kalau lupa, hub author:
+                <a href="https://wa.me/6287896507726" target="_blank">@elgarexsaa</a>
+            </p>
+        </div>
+    </main>
+
+    <script>
+        /* SCRIPT LOGIKA LOGIN */
+
+        /* ===== easy settings (ubah di sini) ===== */
+        const PASSWORD_TO_CHANGE = '01112024'; 
+        const AUTHOR_HANDLE = '@elgarexsaa';
+        const TARGET_PAGE = 'kenangan.html'; 
+        const AUTH_KEY = 'kenangan_verified'; 
+        
+        // elements
+        const pw = document.getElementById('pw');
+        const btnEnter = document.getElementById('btnEnter');
+        const verifyFrame = document.getElementById('verifyFrame');
+        const verifyIcon = document.getElementById('verifyIcon');
+        const verifyText = document.getElementById('verifyText');
+        const loginPage = document.getElementById('loginPage');
+        const loadingPage = document.getElementById('loadingPage');
+        const typingText = document.getElementById('typingText');
+        const togglePw = document.getElementById('togglePw');
+        const loginCard = document.querySelector('.login-card'); // Elemen card login
+        
+        // event listeners
+        pw.addEventListener('keydown', (e) => { 
+            if (e.key === 'Enter') {
+                e.preventDefault(); 
+                attemptEnter(); 
+            }
+        });
+        btnEnter.addEventListener('click', attemptEnter);
+        
+        // LOGIKA TOGGLE PASSWORD (ICON MATA)
+        togglePw.addEventListener('click', () => {
+            const type = pw.getAttribute('type') === 'password' ? 'text' : 'password';
+            pw.setAttribute('type', type);
+            togglePw.textContent = type === 'password' ? '👁️' : '🔒'; 
+            togglePw.setAttribute('aria-label', type === 'password' ? 'tampilkan password' : 'sembunyikan password');
+        });
+
+        function showVerify(ok, message) {
+            verifyFrame.classList.remove('ok', 'fail');
+            verifyFrame.classList.add(ok ? 'ok' : 'fail');
+            verifyIcon.textContent = ok ? '✔' : '✖';
+            verifyText.textContent = message;
+            
+            verifyFrame.hidden = false;
+            verifyFrame.setAttribute('aria-hidden', 'false');
+
+            setTimeout(() => { 
+                verifyFrame.hidden = true;
+                verifyFrame.setAttribute('aria-hidden', 'true');
+            }, 3500);
+        }
+
+        function attemptEnter(){
+            const v = (pw.value || '').trim();
+            
+            // Hapus efek getar jika ada dari percobaan sebelumnya
+            loginCard.classList.remove('shake-effect');
+
+            if (v === PASSWORD_TO_CHANGE){
+                showVerify(true, 'verifikasi berhasil, sedang masuk ke halaman...');
+                
+                localStorage.setItem(AUTH_KEY, 'true'); 
+                
+                loginPage.hidden = true;
+                loadingPage.setAttribute('aria-hidden', 'false');
+                setTimeout(startTypingSequence, 500); 
+            } else {
+                showVerify(false, `verifikasi gagal. hubungi author: ${AUTHOR_HANDLE}`);
+                
+                // === TAMBAHAN LOGIKA GETAR ===
+                loginCard.classList.add('shake-effect');
+                // Hapus kelas setelah animasi selesai (500ms, harus cocok dengan durasi CSS @keyframes shake)
+                setTimeout(() => {
+                    loginCard.classList.remove('shake-effect');
+                }, 500);
+                // === AKHIR TAMBAHAN LOGIKA GETAR ===
+            }
+        }
+
+        function startTypingSequence(){
+            loadingPage.hidden = false; 
+
+            typingText.textContent = '';
+            const text = 'Loading......';
+            let i = 0;
+            const speed = 70;
+
+            const t = setInterval(() => {
+                typingText.textContent += text.charAt(i) || '';
+                i++;
+                if (i > text.length){
+                    clearInterval(t);
+                    
+                    setTimeout(() => {
+                        window.location.href = TARGET_PAGE;
+                    }, 500); 
+                }
+            }, speed);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             loadingPage.hidden = true;
+             loadingPage.setAttribute('aria-hidden', 'true');
+
+             if (localStorage.getItem(AUTH_KEY) === 'true') {
+                 console.log("Token ditemukan, langsung menuju halaman kenangan.");
+                 window.location.href = TARGET_PAGE;
+             }
+        });
+    </script>
+
+</body>
+</html>
