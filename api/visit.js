@@ -1,9 +1,26 @@
 const UAParser = require('ua-parser-js');
 const fetch = require('node-fetch');
 
-// 🗺️ mapping model → nama device lengkap
+// 🧭 ambil ip
+function getClientIp(req) {
+  const xff = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || '';
+  if (xff) return xff.split(',')[0].trim();
+  return req.socket?.remoteAddress || null;
+}
+
+// 🌍 ambil lokasi dari ip
+async function getGeo(ip) {
+  try {
+    const res = await fetch(`https://ipinfo.io/${ip}/json`);
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+// 📱 mapping device
 const deviceMap = {
-  // 📱 SAMSUNG
+  // samsung
   "SM-A015F": "Samsung Galaxy A01",
   "SM-A115F": "Samsung Galaxy A11",
   "SM-A125F": "Samsung Galaxy A12",
@@ -32,7 +49,7 @@ const deviceMap = {
   "SM-A546E": "Samsung Galaxy A54",
   "SM-A156E": "Samsung Galaxy A15",
 
-  // 📱 XIAOMI / POCO / REDMI
+  // xiaomi/poco/redmi
   "M2004J19C": "Redmi 9",
   "M2006C3MG": "Redmi 9A",
   "M2006C3MNG": "Redmi 9C",
@@ -55,7 +72,7 @@ const deviceMap = {
   "23028RA60L": "Redmi Note 12S",
   "K": "Xiaomi Redmi K Series",
 
-  // 📱 OPPO
+  // oppo
   "CPH2127": "OPPO A15",
   "CPH2185": "OPPO A15s",
   "CPH2239": "OPPO A54",
@@ -66,7 +83,7 @@ const deviceMap = {
   "CPH2247": "OPPO Reno 6",
   "CPH2359": "OPPO Reno 8",
 
-  // 📱 VIVO
+  // vivo
   "V2027": "Vivo Y20",
   "V2043": "Vivo Y20s",
   "V2111": "Vivo Y21",
@@ -77,7 +94,7 @@ const deviceMap = {
   "V2313": "Vivo V29e",
   "V2145": "Vivo Y53s",
 
-  // 📱 REALME
+  // realme
   "RMX3231": "Realme C11",
   "RMX3261": "Realme C21",
   "RMX3263": "Realme C21Y",
@@ -88,7 +105,7 @@ const deviceMap = {
   "RMX3624": "Realme C33",
   "RMX3516": "Realme Narzo 50A",
 
-  // 🍎 IPHONE (model iPhone umum)
+  // iphone
   "iPhone": "Apple iPhone (model hidden)",
   "iPhone10,1": "iPhone 8",
   "iPhone10,4": "iPhone 8",
@@ -97,53 +114,25 @@ const deviceMap = {
   "iPhone10,3": "iPhone X",
   "iPhone10,6": "iPhone X",
   "iPhone11,2": "iPhone XS",
-  "iPhone11,4": "iPhone XS Max",
-  "iPhone11,6": "iPhone XS Max",
   "iPhone11,8": "iPhone XR",
   "iPhone12,1": "iPhone 11",
-  "iPhone12,3": "iPhone 11 Pro",
-  "iPhone12,5": "iPhone 11 Pro Max",
-  "iPhone13,1": "iPhone 12 Mini",
   "iPhone13,2": "iPhone 12",
-  "iPhone13,3": "iPhone 12 Pro",
-  "iPhone13,4": "iPhone 12 Pro Max",
-  "iPhone14,4": "iPhone 13 Mini",
   "iPhone14,5": "iPhone 13",
-  "iPhone14,2": "iPhone 13 Pro",
-  "iPhone14,3": "iPhone 13 Pro Max",
   "iPhone15,2": "iPhone 14 Pro",
-  "iPhone15,3": "iPhone 14 Pro Max",
-  "iPhone15,4": "iPhone 14",
-  "iPhone15,5": "iPhone 14 Plus",
 
-  // 🍎 iPad
+  // ipad
   "iPad": "Apple iPad (model hidden)",
-  "iPad7,5": "iPad 6th Gen",
-  "iPad7,6": "iPad 6th Gen",
-  "iPad8,1": "iPad Pro 11 (1st Gen)",
-  "iPad8,9": "iPad Pro 11 (2nd Gen)",
-  "iPad11,6": "iPad 8th Gen",
-  "iPad12,1": "iPad 9th Gen",
-  "iPad13,18": "iPad 10th Gen",
 
-  // 🍏 Mac
-  "Macintosh": "Apple Mac (desktop/laptop)",
+  // mac
+  "Macintosh": "Apple Mac",
 
-  // 📱 Default
+  // default
   "Unknown": "Device Tidak Dikenali"
 };
 
-// 🧠 ambil nama device
 function getDeviceName(raw) {
   if (!raw) return "Unknown Device";
   return deviceMap[raw] || raw;
-}
-
-// 🕵️ ambil ip
-function getClientIp(req) {
-  const xff = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || '';
-  if (xff) return xff.split(',')[0].trim();
-  return req.socket?.remoteAddress || null;
 }
 
 module.exports = async (req, res) => {
@@ -153,9 +142,13 @@ module.exports = async (req, res) => {
   }
 
   const ip = getClientIp(req);
+  const geo = await getGeo(ip);
+  const city = geo?.city || '-';
+  const region = geo?.region || '-';
+  const country = geo?.country || '-';
+
   const payload = req.body || {};
   const uaString = req.headers['user-agent'] || payload.ua || '';
-
   const parser = new UAParser(uaString);
   const uaResult = parser.getResult();
 
@@ -173,6 +166,7 @@ module.exports = async (req, res) => {
 ━━━━━━━━━━━━━━━━━━━
 🕒 *Waktu* : ${time}
 📡 *IP* : \`${ip}\`
+🌍 *Lokasi* : ${city}, ${region}, ${country}
 📱 *Device* : ${deviceName}
 🧭 *OS* : ${osName}
 🌐 *Browser* : ${browserName}
