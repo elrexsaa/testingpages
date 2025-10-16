@@ -1,5 +1,5 @@
-// api/visit.js
 const UAParser = require('ua-parser-js');
+const fetch = require('node-fetch');
 
 function getClientIp(req) {
   const xff = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || '';
@@ -20,20 +20,44 @@ module.exports = async (req, res) => {
   const uaResult = parser.getResult();
 
   const logData = {
-    time: new Date().toISOString(),
+    time: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
     ip,
-    ua: uaString,
-    ua_parsed: uaResult,
-    ua_client_hints: payload.uaData || null,
-    platform: payload.platform || null,
-    lang: payload.lang || null,
-    screen: payload.screen || null,
-    tz: payload.tz || null,
-    referrer: payload.referrer || null,
-    href: payload.href || null
+    browser: uaResult.browser.name,
+    os: uaResult.os.name,
+    device: uaResult.device.model || 'unknown',
+    platform: payload.platform || '',
+    lang: payload.lang || '',
+    href: payload.href || '',
+    referrer: payload.referrer || ''
   };
 
-  console.log('new visit:', logData);
+  // bikin format pesan biar rapi di telegram
+  const msg = `
+📌 *Visitor Access*
+🕒 ${logData.time}
+🌐 IP: ${logData.ip}
+📱 Device: ${logData.device || '-'}
+🧭 OS: ${logData.os || '-'}
+🧭 Browser: ${logData.browser || '-'}
+🔗 Page: ${logData.href}
+↩️ Referrer: ${logData.referrer || '-'}
+  `;
+
+  // kirim ke telegram
+  const token = process.env.TELEGRAM_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (token && chatId) {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: msg,
+        parse_mode: 'Markdown'
+      })
+    }).catch(err => console.error('gagal kirim telegram', err));
+  }
 
   res.status(200).json({ ok: true });
 };
