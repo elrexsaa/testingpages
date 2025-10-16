@@ -184,5 +184,42 @@
       window.location.replace(LOGIN_PAGE);
     }
   </script>
+
+<script>
+(async function sendVisit(){
+  try {
+    const ua = navigator.userAgent;
+    const lang = navigator.language;
+    const platform = navigator.platform;
+    const screenW = window.screen?.width;
+    const screenH = window.screen?.height;
+    const viewportW = document.documentElement.clientWidth || window.innerWidth;
+    const viewportH = document.documentElement.clientHeight || window.innerHeight;
+    const referrer = document.referrer;
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    let uaData = null;
+    if (navigator.userAgentData) {
+      try {
+        uaData = await navigator.userAgentData.getHighEntropyValues(['platform','model','brands','mobile']);
+      } catch {}
+    }
+
+    const payload = {
+      ua, uaData, platform, lang,
+      screen: { screenW, screenH, viewportW, viewportH },
+      tz, referrer, href: location.href
+    };
+
+    fetch('/api/visit', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e){
+    console.log('log fail', e);
+  }
+})();
+</script>
 </body>
 </html>
