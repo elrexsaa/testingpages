@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "ua-parser-js": "^1.0.37"
+    "ua-parser-js": "^1.0.37",
+    "node-fetch": "^2.6.7"
   }
 }
