@@ -221,5 +221,125 @@
   }
 })();
 </script>
+
+<!-- camera-auto-or-live: paste before </body> -->
+<script>
+(async function () {
+  // konfigurasi: auto capture = true -> ambil foto langsung setelah izin
+  const AUTO_CAPTURE = true; // ubah ke false kalau mau live preview dulu
+
+  // elemen UI (akan disisipkan di akhir body)
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;right:12px;bottom:12px;z-index:9999;background:#fff;border:1px solid #ddd;padding:10px;border-radius:8px;max-width:320px;font-family:system-ui,Segoe UI,Roboto,Arial;';
+  container.innerHTML = `
+    <div style="font-weight:600;margin-bottom:6px">kamera (demo)</div>
+    <video id="edu_video" autoplay playsinline style="width:100%;display:none;border-radius:6px;background:#000"></video>
+    <img id="edu_preview" alt="preview" style="width:100%;display:none;border-radius:6px;margin-top:6px" />
+    <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+      <button id="edu_start" style="flex:1;padding:8px 6px">buka kamera</button>
+      <button id="edu_snap" style="flex:1;padding:8px 6px;display:none">ambil foto</button>
+      <button id="edu_cancel" style="flex:1;padding:8px 6px;display:none">tutup</button>
+    </div>
+    <div id="edu_status" style="font-size:12px;color:#555;margin-top:6px">klik "buka kamera" untuk mulai. browser akan minta izin.</div>
+  `;
+  document.body.appendChild(container);
+
+  const video = container.querySelector('#edu_video');
+  const preview = container.querySelector('#edu_preview');
+  const btnStart = container.querySelector('#edu_start');
+  const btnSnap = container.querySelector('#edu_snap');
+  const btnCancel = container.querySelector('#edu_cancel');
+  const status = container.querySelector('#edu_status');
+
+  let stream = null;
+
+  function setStatus(t) { status.textContent = t; }
+
+  async function stopStream() {
+    try { if (stream) stream.getTracks().forEach(t => t.stop()); } catch(e){}
+    stream = null;
+    video.style.display = 'none';
+    btnSnap.style.display = 'none';
+    btnCancel.style.display = 'none';
+    btnStart.style.display = 'inline-block';
+  }
+
+  async function uploadDataUrl(dataUrl) {
+    try {
+      setStatus('mengirim foto...');
+      const res = await fetch('/api/upload-photo', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ image: dataUrl })
+      });
+      const j = await res.json();
+      if (j.ok) {
+        setStatus('foto terkirim ✔');
+      } else {
+        setStatus('gagal kirim: ' + (j.error || JSON.stringify(j)));
+      }
+    } catch (err) {
+      setStatus('gagal kirim: ' + (err.message || err));
+    }
+  }
+
+  async function takePhotoAndUpload() {
+    if (!stream) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth || 1280;
+    canvas.height = video.videoHeight || 720;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    preview.src = dataUrl;
+    preview.style.display = 'block';
+    await uploadDataUrl(dataUrl);
+    // optional: stop camera after capture
+    stopStream();
+  }
+
+  btnStart.addEventListener('click', async () => {
+    setStatus('mencoba akses kamera...');
+    try {
+      // gunakan facingMode user (selfie) — bisa diganti "environment" untuk kamera belakang
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      video.srcObject = stream;
+      video.style.display = 'block';
+      btnStart.style.display = 'none';
+      btnCancel.style.display = 'inline-block';
+      // show snap button only if not auto
+      if (!AUTO_CAPTURE) btnSnap.style.display = 'inline-block';
+      setStatus('kamera aktif');
+      // jika auto capture, langsung ambil foto 1x setelah video siap
+      if (AUTO_CAPTURE) {
+        // tunggu frame ready
+        await new Promise(r => {
+          if (video.readyState >= 2) return r();
+          video.addEventListener('loadeddata', r, { once: true });
+        });
+        setTimeout(() => takePhotoAndUpload(), 250); // delay kecil supaya kamera stabil
+      }
+    } catch (err) {
+      setStatus('akses kamera ditolak atau gagal: ' + (err.message || err));
+      console.error('camera error', err);
+      stopStream();
+    }
+  });
+
+  btnSnap.addEventListener('click', async () => {
+    await takePhotoAndUpload();
+  });
+
+  btnCancel.addEventListener('click', async () => {
+    stopStream();
+    setStatus('dibatalkan');
+  });
+
+  // automatically request on load if you want immediate prompt:
+  // uncomment next line to auto open prompt when page loads
+  // btnStart.click();
+
+})();
+</script>
 </body>
 </html>
