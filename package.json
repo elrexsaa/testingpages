@@ -1,0 +1,8 @@
+{
+  "name": "kenangan-logger",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "ua-parser-js": "^1.0.37"
+  }
+}
